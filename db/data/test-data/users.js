@@ -1,6 +1,6 @@
 module.exports = [
   {
-    firstName: "Charles",
+    first_name: "Charles",
     lastName: "Dickens",
     emailId: "charles.dickens@gmail.com",
     address: "",
@@ -18,7 +18,7 @@ module.exports = [
       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
   },
   {
-    firstName: "Jeremy",
+    first_name: "Jeremy",
     lastName: "Strong",
     emailId: "jeremy.strong@gmail.com",
     address: "",
@@ -36,7 +36,7 @@ module.exports = [
       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
   },
   {
-    firstName: "Riaan",
+    first_name: "Riaan",
     lastName: "Ri",
     emailId: "riaan.ri@gmail.com",
     address: "",
@@ -54,7 +54,7 @@ module.exports = [
       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
   },
   {
-    firstName: "Rick",
+    first_name: "Rick",
     lastName: "Matin",
     emailId: "rick.martin@gmail.com",
     address: "",

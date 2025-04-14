@@ -1,7 +1,12 @@
 module.exports = [
   {
-    active: "This event is currently active",
-    inactive: "This event is currently inactive",
-    closed: "This event has been closed",
+    name: "active",
+    description:"This event is currently active"
   },
+  {
+    name: "inactive",
+    description: "This event is currently inactive",
+  },
+
+  { name: "closed", description: "This event has been closed" },
 ];
