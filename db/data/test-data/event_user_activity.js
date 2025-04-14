@@ -1,0 +1,51 @@
+module.exports = [
+  {
+    event_id: 1,
+    user_hosting_id: 1,
+    user_attending_id: 2,
+    user_status: "Requested",
+    user_approved: false,
+  },
+  {
+    event_id: 2,
+    user_hosting_id: 2,
+    user_attending_id: 3,
+    user_status: "Cancelled",
+    user_approved: true,
+  },
+  {
+    event_id: 3,
+    user_hosting_id: 3,
+    user_attending_id: 4,
+    user_status: "Approved",
+    user_approved: true,
+  },
+  {
+    event_id: 4,
+    user_hosting_id: 4,
+    user_attending_id: 5,
+    user_status: "Requested",
+    user_approved: false,
+  },
+  {
+    event_id: 5,
+    user_hosting_id: 5,
+    user_attending_id: 6,
+    user_status: "Cancelled",
+    user_approved: true,
+  },
+  {
+    event_id: 6,
+    user_hosting_id: 6,
+    user_attending_id: 7,
+    user_status: "Approved",
+    user_approved: true,
+  },
+  {
+    event_id: 7,
+    user_hosting_id: 7,
+    user_attending_: 1,
+    user_status: "Requested",
+    user_approved: false,
+  },
+];
