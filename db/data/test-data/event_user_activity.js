@@ -1,0 +1,51 @@
+module.exports = [
+  {
+    event_id: 1,
+    user_hosting: "Katie Hardy",
+    user_attending: "Mary Davis",
+    user_status: "Requested",
+    user_approved: false,
+  },
+  {
+    event_id: 2,
+    user_hosting: "Rob Harmer",
+    user_attending: "Mark Johnson",
+    user_status: "Cancelled",
+    user_approved: true,
+  },
+  {
+    event_id: 3,
+    user_hosting: "George Constantin",
+    user_attending: "Abigail Thompson",
+    user_status: "Approved",
+    user_approved: true,
+  },
+  {
+    event_id: 4,
+    user_hosting: "Iryna Herasymchuk",
+    user_attending: "Thomas Stewart",
+    user_status: "Requested",
+    user_approved: false,
+  },
+  {
+    event_id: 5,
+    user_hosting: "Shruti Khetan",
+    user_attending: "Mark Stevens",
+    user_status: "Cancelled",
+    user_approved: true,
+  },
+  {
+    event_id: 6,
+    user_hosting: "Astrid Mina",
+    user_attending: "Emma Woodhouse",
+    user_status: "Approved",
+    user_approved: true,
+  },
+  {
+    event_id: 7,
+    user_hosting: "Munir Saeed",
+    user_attending: "Frederick Wentworth",
+    user_status: "Requested",
+    user_approved: false,
+  },
+];
