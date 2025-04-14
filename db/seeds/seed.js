@@ -12,22 +12,41 @@ const seed = ({
   interestData,
 }) => {
   return db
-    .query("DROP TABLE IF EXISTS users")
+    .query("DROP TABLE IF EXISTS events")
     .then(() => {
-      db.query("DROP TABLE IF EXISTS interests");
+      db.query("DROP TYPE IF EXISTS event_status");
+    })
+    .then(() => {
+      db.query("DROP TYPE IF EXISTS interests");
+    })
+    .then(() => {
+      db.query("DROP TABLE IF EXISTS users");
     })
     .then(() => {
       return createInterests();
     })
     .then(() => {
+      return createEventStatus();
+    })
+    .then(() => {
       return createUsers();
+    })
+    .then(() => {
+      return createEvents();
     });
 };
 
 function createInterests() {
   return db.query(
     `CREATE TYPE interests AS
-      ENUM('Cooking', 'Dancing', 'Dog Walking', 'Theater', 'Reading')`,
+      ENUM('COOKING', 'DANCING', 'DOG WALKING', 'THEATER', 'READING','OTHER')`
+  );
+}
+
+function createEventStatus() {
+  return db.query(
+    `CREATE TYPE event_status AS
+      ENUM('ACTIVE', 'INACTIVE','CLOSED')`
   );
 }
 
@@ -48,7 +67,7 @@ function createUsers() {
     reason VARCHAR,
     job_title VARCHAR,
     coffee_tea VARCHAR,
-    image_url VARCHAR)`,
+    image_url VARCHAR)`
   );
 }
 
@@ -56,16 +75,16 @@ function createEvents() {
   return db.query(
     `CREATE TABLE events (
     event_id SERIAL PRIMARY KEY,
-    user_id VARCHAR NOT NULL,
+    user_id INT NOT NULL,
     title VARCHAR NOT NULL,
     description VARCHAR NOT NULL,
     location VARCHAR NOT NULL,
-    category VARCHAR,
+    category INTERESTS NOT NULL ,
+    status EVENT_STATUS NOT NULL ,
     time VARCHAR,
     created_at DATE,
-    FOREIGN KEY (category) REFERENCES interest(name) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-   `,
+   `
   );
 }
 
