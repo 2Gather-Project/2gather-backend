@@ -1,6 +1,5 @@
 module.exports = [
   {
-    event_id: 1,
     creator_id: 1,
     title: "Come and visit the Natural History Museum with me!",
     description: "Visit the museum and chat about history and life.",
@@ -9,7 +8,6 @@ module.exports = [
     created_at: "2025-04-14",
   },
   {
-    event_id: 2,
     creator_id: 2,
     title: "Coffee and a chat",
     description: "Lets gossip!",
@@ -18,7 +16,6 @@ module.exports = [
     created_at: "2025-04-26",
   },
   {
-    event_id: 3,
     creator_id: 3,
     title: "Board game cafe",
     description: "I'll beat you of course ;)",
@@ -27,7 +24,6 @@ module.exports = [
     created_at: "2025-04-26",
   },
   {
-    event_id: 4,
     creator_id: 4,
     title: "Coffee & Coding",
     description:
@@ -37,7 +33,6 @@ module.exports = [
     created_at: "2025-04-20",
   },
   {
-    event_id: 5,
     creator_id: 5,
     title: "Sketch & Chill",
     description:
@@ -47,7 +42,6 @@ module.exports = [
     created_at: "2025-04-20",
   },
   {
-    event_id: 6,
     creator_id: 6,
     title: "Street Food Lunch",
     description:
@@ -57,7 +51,6 @@ module.exports = [
     created_at: "2025-04-26",
   },
   {
-    event_id: 7,
     creator_id: 7,
     title: "Bookshop Hangout",
     description:
