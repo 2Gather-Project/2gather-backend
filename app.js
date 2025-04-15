@@ -9,33 +9,18 @@ const fastifyApp = fastify({
   logger: true,
 });
 
-fastifyApp.get("/", async function () {
-  return { message: " Hello go to /api for all the endpoints!!" };
-});
-
 fastifyApp.get("/api", getEndpoints);
 
 fastifyApp.get("/api/users", allUsers);
 
 fastifyApp.get("/api/events", getEvents);
 
-async function main() {
-  await fastifyApp.listen({ port: 3000 }, (err, address) => {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    console.log(`Server running at ${address}`);
-  });
-}
-
-["SIGINT", "SIGTERM"].forEach((signal) => {
-  process.on(signal, async () => {
-    await fastifyApp.close();
-    process.exit(0);
-  });
+fastifyApp.listen({ port: 3000 }, (err, address) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(`Server running at ${address}`);
 });
-
-main();
 
 module.exports = fastifyApp;
