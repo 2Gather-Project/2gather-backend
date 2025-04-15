@@ -1,5 +1,7 @@
-import { endpoints } from "../endpoints.json";
+const endpoints = require("../endpoints.json");
 
-export const getEndpoints = (request, reply) => {
+const getEndpoints = (request, reply) => {
   reply.send({ endpoints });
 };
+
+module.exports = { getEndpoints };
