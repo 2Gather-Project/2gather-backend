@@ -1,16 +1,21 @@
-const { getUsers } = require("../model/users.model");
+const db = require("../db/connection")
 
-const allUsers = (request, reply, next) => {
-  getUsers()
-    .then((users) => {
-      reply.send({ users });
-    })
-    .catch((err) => {
-      next(err);
-    });
+
+const usersExists = (user_id) => {
+    return  db.query(`select * from users where user_id = $1`,[user_id])
+            .then(({rows}) => {
+                if(rows.length !== 0) {
+                        return true;
+                }
+                return false;
+            })
+}
+
+
+const getUsers = () => {
+  return db.query(`SELECT * FROM users;`).then(({ rows }) => {
+    return rows;
+  });
 };
 
-module.exports = { allUsers };
-
-
-
+module.exports = {usersExists, getUsers};

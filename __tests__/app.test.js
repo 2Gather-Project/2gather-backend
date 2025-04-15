@@ -4,7 +4,7 @@ const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
-const fastifyApp = require("../app");
+const app = require("../app");
 
 /* Set up your beforeEach & afterAll functions here */
 
@@ -18,7 +18,7 @@ afterAll(() => {
 
 describe("GET /api", () => {
   test("200: Responds with an object detailing the documentation for each endpoint", () => {
-    return request(fastifyApp)
+    return request(app)
       .get("/api")
       .expect(200)
       .then(({ body: { endpoints } }) => {
@@ -29,7 +29,7 @@ describe("GET /api", () => {
 
 describe("GET /api/users", () => {
   test("200: gets all the users", () => {
-    return request(fastifyApp)
+    return request(app)
       .get("/api/users")
       .expect(200)
       .then(({ body: { users } }) => {
@@ -44,7 +44,7 @@ describe("GET /api/users", () => {
 
 describe("GET /api/events", () => {
   test("200: Responds with all the events", () => {
-    return request(fastifyApp)
+    return request(app)
       .get("/api/events")
       .expect(200)
       .then(({ body: { events } }) => {
@@ -119,5 +119,3 @@ describe("GET /api/events", () => {
   //     });
   // });
 });
-
-
