@@ -6,11 +6,9 @@ const seed = async ({
   blockedUsersData,
   chatMessagesData,
   chatRoomsData,
-  eventStatusData,
   eventUserActivityData,
   eventsData,
   friendRequestsData,
-  interestData,
 }) => {
   try {
     await db.query("DROP TABLE IF EXISTS event_user_activity");
@@ -42,6 +40,18 @@ const seed = async ({
 
     console.log("3");
     await insertEventUserActivity(eventUserActivityData);
+
+    console.log("4");
+    await insertFriendRequest(friendRequestsData);
+
+    console.log("5");
+    await insertChatRooms(chatRoomsData);
+
+    console.log("6");
+    await insertChatMessages(chatMessagesData);
+
+    console.log("7");
+    await insertBlockedUsers(blockedUsersData);
   } catch (error) {
     console.error(error);
   }
@@ -150,7 +160,7 @@ function createChatMessages() {
   return db.query(
     `CREATE TABLE chat_messages (
     message VARCHAR NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at DATE,
     chat_id INT NOT NULL,
     user_id INT NOT NULL,
     FOREIGN KEY (chat_id) REFERENCES chat_rooms(chat_id),
@@ -160,7 +170,6 @@ function createChatMessages() {
   );
 }
 
-// Not sure if the FKs for the seperate user_id's are correct. It will be helpful if someone would have a second look.
 function createChatRooms() {
   return db.query(
     `CREATE TABLE chat_rooms (
@@ -243,6 +252,60 @@ function insertEventUserActivity(eventUserActivityData) {
     format(
       `INSERT INTO event_user_activity (event_id, host_id, attendee_id, user_status, user_approved) VALUES %L RETURNING *`,
       event_user_activity
+    )
+  );
+}
+
+function insertFriendRequest(friendRequestsData) {
+  const friend_requests = friendRequestsData.map((request) => {
+    return [request.sender, request.reciever, request.status];
+  });
+  return db.query(
+    format(
+      `INSERT INTO friend_requests (
+      sender_id, receiver_id, status) VALUES %L RETURNING *
+      `,
+      friend_requests
+    )
+  );
+}
+
+function insertChatRooms(chatRoomsData) {
+  const chat_rooms = chatRoomsData.map((chat) => {
+    return [chat.user1_id, chat.user2_id, chat.event_id];
+  });
+  return db.query(
+    format(
+      `INSERT INTO chat_rooms (
+      user1_id, user2_id, event_id) VALUES %L RETURNING *`,
+      chat_rooms
+    )
+  );
+}
+
+function insertChatMessages(chatMessagesData) {
+  const chat_messages = chatMessagesData.map((message) => {
+    const formattedDate = new Date(message.created_at).toISOString();
+    return [message.chat_id, message.message, formattedDate, message.user_id];
+  });
+  return db.query(
+    format(
+      `INSERT INTO chat_messages (
+      chat_id, message, created_at, user_id) VALUES %L RETURNING *`,
+      chat_messages
+    )
+  );
+}
+
+function insertBlockedUsers(blockedUsersData) {
+  const blocked_users = blockedUsersData.map((user) => {
+    return [user.user_id, user.blocked_user_id];
+  });
+  return db.query(
+    format(
+      `INSERT INTO blocked_users (
+      user_id, blocked_user_id) VALUES %L RETURNING *`,
+      blocked_users
     )
   );
 }
