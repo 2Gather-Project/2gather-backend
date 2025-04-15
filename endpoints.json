@@ -2,12 +2,45 @@
   "GET /api": {
     "description": "Serves up a json representation of all the available endpoints of the api"
   },
-  "GET /api/topics": {
-    "description": "Serves an array of all articles",
+  "GET /api/users": {
+    "description": "Serves an array of all users",
     "queries": [],
-    "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
-    }
+    "exampleResponse": [
+      {
+        "user_id": 1,
+        "first_name": "Charles",
+        "last_name": "Dickens",
+        "email": "charles.dickens@gmail.com",
+        "address": "",
+        "phone_number": "",
+        "date_of_birth": "1909-08-01T00:00:00.000Z",
+        "fav_food": "burger",
+        "personality": "",
+        "bio": "",
+        "gender": "Female",
+        "reason": "",
+        "job_title": "Author",
+        "coffee_tea": "Tea",
+        "image_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
+      },
+      {
+        "user_id": 2,
+        "first_name": "Jeremy",
+        "last_name": "Strong",
+        "email": "jeremy.strong@gmail.com",
+        "address": "",
+        "phone_number": "",
+        "date_of_birth": "1909-08-01T00:00:00.000Z",
+        "fav_food": "pizza",
+        "personality": "",
+        "bio": "",
+        "gender": "Male",
+        "reason": "",
+        "job_title": "Author",
+        "coffee_tea": "Tea",
+        "image_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
+      }
+    ]
   },
   "GET /api/articles": {
     "description": "Serves an array of all articles",
@@ -86,43 +119,5 @@
   "DELETE /api/comments/:comment_id": {
     "description": "Deletes the comment for a comment_id",
     "queries": ["article", "sort_by", "order"]
-  },
-  "GET /api/users": {
-    "description": "list all the users with their information",
-    "queries": ["author", "topic", "sort_by", "order"],
-    "exampleResponse": {
-      "users": [
-        {
-          "username": "tickle122",
-          "name": "Tom Tickle",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
-        },
-        {
-          "username": "grumpy19",
-          "name": "Paul Grump",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
-        },
-        {
-          "username": "happyamy2016",
-          "name": "Amy Happy",
-          "avatar_url": "https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729"
-        },
-        {
-          "username": "cooljmessy",
-          "name": "Peter Messy",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002"
-        },
-        {
-          "username": "weegembump",
-          "name": "Gemma Bump",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/7e/MrMen-Bump.png/revision/latest?cb=20180123225553"
-        },
-        {
-          "username": "jessjelly",
-          "name": "Jess Jelly",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141"
-        }
-      ]
-    }
   }
 }
