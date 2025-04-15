@@ -73,27 +73,31 @@ const seed = ({
     .then(() => {
       console.log("15");
       return insertEventsData(eventsData);
+    })
+    .then(() => {
+      console.log("16");
+      return insertEventUserActivity(eventUserActivityData);
     });
 };
 
 function createInterests() {
   return db.query(
     `CREATE TYPE interests AS
-      ENUM('COOKING', 'DANCING', 'DOG WALKING', 'THEATER', 'READING','OTHER')`
+      ENUM('COOKING', 'DANCING', 'DOG WALKING', 'THEATER', 'READING','OTHER')`,
   );
 }
 
 function createEventStatus() {
   return db.query(
     `CREATE TYPE event_status AS
-      ENUM('ACTIVE', 'INACTIVE','CLOSED')`
+      ENUM('ACTIVE', 'INACTIVE','CLOSED')`,
   );
 }
 
 function createUserActivityStatus() {
   return db.query(
     `CREATE TYPE user_activity_status AS
-      ENUM('REQUESTED', 'APPROVED','CANCELLED')`
+      ENUM('REQUESTED', 'APPROVED','CANCELLED')`,
   );
 }
 
@@ -114,7 +118,7 @@ function createUsers() {
     reason VARCHAR,
     job_title VARCHAR,
     coffee_tea VARCHAR,
-    image_url VARCHAR)`
+    image_url VARCHAR)`,
   );
 }
 
@@ -131,7 +135,7 @@ function createEvents() {
     time VARCHAR,
     created_at DATE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE)
-   `
+   `,
   );
 }
 
@@ -146,7 +150,7 @@ function createEventUserActivity() {
     user_approved BOOLEAN,
     PRIMARY KEY (event_id, host_id, attendee_id)
     )
-    `
+    `,
   );
 }
 
@@ -159,7 +163,7 @@ function createFriendRequests() {
      FOREIGN KEY (sender_id) REFERENCES users(user_id),
       FOREIGN KEY (receiver_id) REFERENCES users(user_id),
     status USER_ACTIVITY_STATUS NOT NULL
-    )`
+    )`,
   );
 }
 
@@ -171,7 +175,7 @@ function createBlockedUsers() {
      FOREIGN KEY (user_id) REFERENCES users(user_id),
       FOREIGN KEY (blocked_user_id) REFERENCES users(user_id),
     PRIMARY KEY(user_id, blocked_user_id)
-    )`
+    )`,
   );
 }
 
@@ -198,12 +202,12 @@ function insertDataUsers(usersData) {
   console.log(users);
   return db.query(
     format(
-      `INSERT INTO users 
+      `INSERT INTO users
                   (first_name,last_name,email,address, phone_number,date_of_birth,fav_food,personality,bio,gender,reason,job_title,coffee_tea,image_url)
                   VALUES
                   %L RETURNING *;`,
-      users
-    )
+      users,
+    ),
   );
 }
 
@@ -223,12 +227,31 @@ function insertEventsData(eventsData) {
   console.log(events);
   return db.query(
     format(
-      `INSERT INTO events 
+      `INSERT INTO events
                   (user_id,title,description,location,time ,created_at)
                   VALUES
                   %L RETURNING *;`,
-      events
-    )
+      events,
+    ),
+  );
+}
+
+function insertEventUserActivity(eventUserActivityData) {
+  const event_user_activity = eventUserActivityData.map((activity) => {
+    console.log(activity, "in insert eventuseractivity");
+    return [
+      activity.event_id,
+      activity.host_id,
+      activity.attendee_id,
+      activity.user_status,
+      activity.user_approved,
+    ];
+  });
+  return db.query(
+    format(
+      `INSERT INTO event_user_activity (event_id, host_id, attendee_id, user_status, user_approved) VALUES %L RETURNING *`,
+      event_user_activity,
+    ),
   );
 }
 
