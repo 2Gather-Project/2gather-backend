@@ -1,28 +1,44 @@
-// const endpointsJson = require("../endpoints.json");
-// /* Set up your test imports here */
-// const request = require("supertest");
-// const db = require("../db/connection");
-// const seed = require("../db/seeds/seed");
-// const data = require("../db/data/test-data");
-// const app = require("../app");
+const request = require("supertest");
+const db = require("../db/connection");
+const seed = require("../db/seeds/seed");
+const data = require("../db/data/test-data");
+const endpointsJson = require("../endpoints.json");
+const fastifyApp = require("../app");
 
-// /* Set up your beforeEach & afterAll functions here */
+let server;
 
-// beforeEach(() => {
-//   return seed(data);
-// });
+beforeAll(async () => {
+  await fastifyApp.ready();
+  server = fastifyApp.server; // this gives Supertest the Node http.Server
+});
 
-// afterAll(() => {
-//   db.end();
-// });
+beforeEach(() => {
+  return seed(data);
+});
 
-// describe("GET /api", () => {
-//   test("200: Responds with an object detailing the documentation for each endpoint", () => {
-//     return request(app)
-//       .get("/api")
-//       .expect(200)
-//       .then(({ body: { endpoints } }) => {
-//         expect(endpoints).toEqual(endpointsJson);
-//       });
-//   });
-// });
+afterAll(async () => {
+  await fastifyApp.close(); // close Fastify
+  await db.end(); // close db pool
+});
+
+describe("GET /api", () => {
+  test("200: responds with API endpoints documentation", () => {
+    return request(server)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.endpoints).toEqual(endpointsJson);
+      });
+  });
+});
+
+describe("GET /api/users", () => {
+  test("200: reponds with a object users that contains an array with all the users in the db", () => {
+    return request(server)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
+      });
+  });
+});
