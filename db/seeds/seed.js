@@ -31,26 +31,12 @@ const seed = async ({
     await createBlockedUsers();
     await createChatRooms();
     await createChatMessages();
-
-    console.log("1");
     await insertDataUsers(usersData);
-
-    console.log("2");
     await insertEventsData(eventsData);
-
-    console.log("3");
     await insertEventUserActivity(eventUserActivityData);
-
-    console.log("4");
     await insertFriendRequest(friendRequestsData);
-
-    console.log("5");
     await insertChatRooms(chatRoomsData);
-
-    console.log("6");
     await insertChatMessages(chatMessagesData);
-
-    console.log("7");
     await insertBlockedUsers(blockedUsersData);
   } catch (error) {
     console.error(error);
