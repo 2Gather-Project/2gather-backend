@@ -1,103 +1,80 @@
 const db = require("../connection");
 const format = require("pg-format");
 
-const seed = ({
+const seed = async ({
   usersData,
   blockedUsersData,
   chatMessagesData,
   chatRoomsData,
-  eventStatusData,
   eventUserActivityData,
   eventsData,
   friendRequestsData,
-  interestData,
 }) => {
-  return db
-    .query("DROP TABLE IF EXISTS event_user_activity")
-    .then(() => {
-      console.log("1");
-      db.query("DROP TABLE IF EXISTS friend_requests");
-    })
-    .then(() => {
-      console.log("2");
-      db.query("DROP TABLE IF EXISTS events");
-    })
-    .then(() => {
-      console.log("3");
-      db.query("DROP TABLE IF EXISTS users");
-    })
-    .then(() => {
-      console.log("4");
-      db.query("DROP TYPE IF EXISTS interests");
-    })
-    .then(() => {
-      console.log("5");
-      db.query("DROP TYPE IF EXISTS event_status");
-    })
-    .then(() => {
-      console.log("6");
-      db.query("DROP TYPE IF EXISTS user_activity_status");
-    })
-    .then(() => {
-      console.log("7");
-      return createInterests();
-    })
-    .then(() => {
-      console.log("8");
-      return createEventStatus();
-    })
-    .then(() => {
-      console.log("9");
-      return createUserActivityStatus();
-    })
-    .then(() => {
-      console.log("10");
-      return createUsers();
-    })
-    .then(() => {
-      console.log("11");
-      return createEvents();
-    })
-    .then(() => {
-      console.log("12");
-      return createEventUserActivity();
-    })
-    .then(() => {
-      console.log("13");
-      return createFriendRequests();
-    })
-    .then(() => {
-      console.log("14");
-      return insertDataUsers(usersData);
-    })
-    .then(() => {
-      console.log("15");
-      return insertEventsData(eventsData);
-    })
-    .then(() => {
-      console.log("16");
-      return insertEventUserActivity(eventUserActivityData);
-    });
+  try {
+    await db.query("DROP TABLE IF EXISTS event_user_activity");
+    await db.query("DROP TABLE IF EXISTS friend_requests");
+    await db.query("DROP TABLE IF EXISTS chat_messages");
+    await db.query("DROP TABLE IF EXISTS chat_rooms");
+    await db.query("DROP TABLE IF EXISTS events");
+    await db.query(`DROP TABLE IF EXISTS blocked_users`);
+    await db.query("DROP TABLE IF EXISTS users");
+    await db.query("DROP TYPE IF EXISTS interests");
+    await db.query("DROP TYPE IF EXISTS event_status");
+    await db.query("DROP TYPE IF EXISTS user_activity_status");
+    await createInterests();
+    await createEventStatus();
+    await createUserActivityStatus();
+    await createUsers();
+    await createEvents();
+    await createEventUserActivity();
+    await createFriendRequests();
+    await createBlockedUsers();
+    await createChatRooms();
+    await createChatMessages();
+
+    console.log("1");
+    await insertDataUsers(usersData);
+
+    console.log("2");
+    await insertEventsData(eventsData);
+
+    console.log("3");
+    await insertEventUserActivity(eventUserActivityData);
+
+    console.log("4");
+    await insertFriendRequest(friendRequestsData);
+
+    console.log("5");
+    await insertChatRooms(chatRoomsData);
+
+    console.log("6");
+    await insertChatMessages(chatMessagesData);
+
+    console.log("7");
+    await insertBlockedUsers(blockedUsersData);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 function createInterests() {
   return db.query(
     `CREATE TYPE interests AS
-      ENUM('COOKING', 'DANCING', 'DOG WALKING', 'THEATER', 'READING','OTHER')`,
+      ENUM('COOKING', 'DANCING', 'DOG WALKING', 'THEATER', 'READING','OTHER')`
   );
 }
 
 function createEventStatus() {
   return db.query(
     `CREATE TYPE event_status AS
-      ENUM('ACTIVE', 'INACTIVE','CLOSED')`,
+      ENUM('ACTIVE', 'INACTIVE','CLOSED')`
   );
 }
 
 function createUserActivityStatus() {
   return db.query(
     `CREATE TYPE user_activity_status AS
-      ENUM('REQUESTED', 'APPROVED','CANCELLED')`,
+      ENUM('REQUESTED', 'APPROVED','CANCELLED')`
   );
 }
 
@@ -118,7 +95,7 @@ function createUsers() {
     reason VARCHAR,
     job_title VARCHAR,
     coffee_tea VARCHAR,
-    image_url VARCHAR)`,
+    image_url VARCHAR)`
   );
 }
 
@@ -135,7 +112,7 @@ function createEvents() {
     time VARCHAR,
     created_at DATE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE)
-   `,
+   `
   );
 }
 
@@ -150,7 +127,7 @@ function createEventUserActivity() {
     user_approved BOOLEAN,
     PRIMARY KEY (event_id, host_id, attendee_id)
     )
-    `,
+    `
   );
 }
 
@@ -160,10 +137,10 @@ function createFriendRequests() {
     request_id SERIAL PRIMARY KEY,
     sender_id INT,
     receiver_id INT,
-     FOREIGN KEY (sender_id) REFERENCES users(user_id),
-      FOREIGN KEY (receiver_id) REFERENCES users(user_id),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id),
+    FOREIGN KEY (receiver_id) REFERENCES users(user_id),
     status USER_ACTIVITY_STATUS NOT NULL
-    )`,
+    )`
   );
 }
 
@@ -172,10 +149,38 @@ function createBlockedUsers() {
     `CREATE TABLE blocked_users (
     user_id INT NOT NULL,
     blocked_user_id INT NOT NULL,
-     FOREIGN KEY (user_id) REFERENCES users(user_id),
-      FOREIGN KEY (blocked_user_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (blocked_user_id) REFERENCES users(user_id),
     PRIMARY KEY(user_id, blocked_user_id)
-    )`,
+    )`
+  );
+}
+
+function createChatMessages() {
+  return db.query(
+    `CREATE TABLE chat_messages (
+    message VARCHAR NOT NULL,
+    created_at DATE,
+    chat_id INT NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (chat_id) REFERENCES chat_rooms(chat_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id), 
+    PRIMARY KEY (chat_id, user_id)
+    )`
+  );
+}
+
+function createChatRooms() {
+  return db.query(
+    `CREATE TABLE chat_rooms (
+    chat_id SERIAL PRIMARY KEY,
+    user1_id INT NOT NULL,
+    user2_id INT NOT NULL,
+    event_id INT NOT NULL,
+    FOREIGN KEY (user1_id) REFERENCES users(user_id),
+    FOREIGN KEY (user2_id) REFERENCES users(user_id),
+    FOREIGN KEY (event_id) REFERENCES events(event_id)
+    )`
   );
 }
 
@@ -199,20 +204,18 @@ function insertDataUsers(usersData) {
     ];
   });
 
-  console.log(users);
   return db.query(
     format(
       `INSERT INTO users
                   (first_name,last_name,email,address, phone_number,date_of_birth,fav_food,personality,bio,gender,reason,job_title,coffee_tea,image_url)
                   VALUES
                   %L RETURNING *;`,
-      users,
-    ),
+      users
+    )
   );
 }
 
 function insertEventsData(eventsData) {
-  console.log(eventsData);
   const events = eventsData.map((event) => {
     return [
       event.user_id,
@@ -224,21 +227,19 @@ function insertEventsData(eventsData) {
     ];
   });
 
-  console.log(events);
   return db.query(
     format(
       `INSERT INTO events
                   (user_id,title,description,location,time ,created_at)
                   VALUES
                   %L RETURNING *;`,
-      events,
-    ),
+      events
+    )
   );
 }
 
 function insertEventUserActivity(eventUserActivityData) {
   const event_user_activity = eventUserActivityData.map((activity) => {
-    console.log(activity, "in insert eventuseractivity");
     return [
       activity.event_id,
       activity.host_id,
@@ -250,8 +251,62 @@ function insertEventUserActivity(eventUserActivityData) {
   return db.query(
     format(
       `INSERT INTO event_user_activity (event_id, host_id, attendee_id, user_status, user_approved) VALUES %L RETURNING *`,
-      event_user_activity,
-    ),
+      event_user_activity
+    )
+  );
+}
+
+function insertFriendRequest(friendRequestsData) {
+  const friend_requests = friendRequestsData.map((request) => {
+    return [request.sender, request.reciever, request.status];
+  });
+  return db.query(
+    format(
+      `INSERT INTO friend_requests (
+      sender_id, receiver_id, status) VALUES %L RETURNING *
+      `,
+      friend_requests
+    )
+  );
+}
+
+function insertChatRooms(chatRoomsData) {
+  const chat_rooms = chatRoomsData.map((chat) => {
+    return [chat.user1_id, chat.user2_id, chat.event_id];
+  });
+  return db.query(
+    format(
+      `INSERT INTO chat_rooms (
+      user1_id, user2_id, event_id) VALUES %L RETURNING *`,
+      chat_rooms
+    )
+  );
+}
+
+function insertChatMessages(chatMessagesData) {
+  const chat_messages = chatMessagesData.map((message) => {
+    const formattedDate = new Date(message.created_at).toISOString();
+    return [message.chat_id, message.message, formattedDate, message.user_id];
+  });
+  return db.query(
+    format(
+      `INSERT INTO chat_messages (
+      chat_id, message, created_at, user_id) VALUES %L RETURNING *`,
+      chat_messages
+    )
+  );
+}
+
+function insertBlockedUsers(blockedUsersData) {
+  const blocked_users = blockedUsersData.map((user) => {
+    return [user.user_id, user.blocked_user_id];
+  });
+  return db.query(
+    format(
+      `INSERT INTO blocked_users (
+      user_id, blocked_user_id) VALUES %L RETURNING *`,
+      blocked_users
+    )
   );
 }
 
