@@ -2,125 +2,79 @@
   "GET /api": {
     "description": "Serves up a json representation of all the available endpoints of the api"
   },
-  "GET /api/topics": {
-    "description": "Serves an array of all articles",
-    "queries": [],
-    "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
-    }
-  },
-  "GET /api/articles": {
-    "description": "Serves an array of all articles",
-    "queries": ["column_name", "value", "sort_by", "order"],
-    "exampleResponse": {
-      "articles": [
-        {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": "2018-05-30T15:59:13.341Z",
-          "votes": 0,
-          "comment_count": 6
-        }
-      ]
-    }
-  },
-  "GET /api/articles/:article_id/comments": {
-    "description": "Serves all the comments for article id provided",
-    "queries": ["article", "comments", "sort_by", "order"],
-    "exampleResponse": {
-      "comments": [
-        {
-          "comment_id": 89,
-          "article_id": 1,
-          "body": "Esse et expedita harum non. Voluptatibus commodi voluptatem. Minima velit suscipit numquam ea. Id vitae debitis aut incidunt odio quo quam possimus ipsum.",
-          "votes": 2,
-          "author": "cooljmessy",
-          "created_at": "2020-10-24T07:08:00.000Z"
-        }
-      ]
-    }
-  },
-  "POST /api/articles/:article_id/comments": {
-    "description": "Creates a comment for the article_id",
-    "queries": ["article", "comments", "sort_by", "order"],
-    "exampleRequest": {
-      "username": "butter_bridge",
-      "body": "Hello!!"
-    },
-    "exampleResponse": {
-      "comments": [
-        {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": "2018-05-30T15:59:13.341Z",
-          "votes": 0,
-          "comment_count": 6
-        }
-      ]
-    }
-  },
-  "PATCH /api/articles/:article_id": {
-    "description": "Increase or decrease an article votes for a particular article",
-    "queries": ["article", "sort_by", "order"],
-    "exampleRequestBody": {
-      "inc_votes": 1
-    },
-    "exampleResponse": {
-      "articles": [
-        {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": "2018-05-30T15:59:13.341Z",
-          "votes": 1,
-          "comment_count": 6
-        }
-      ]
-    }
-  },
-  "DELETE /api/comments/:comment_id": {
-    "description": "Deletes the comment for a comment_id",
-    "queries": ["article", "sort_by", "order"]
-  },
+
   "GET /api/users": {
     "description": "list all the users with their information",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": [],
     "exampleResponse": {
       "users": [
         {
-          "username": "tickle122",
-          "name": "Tom Tickle",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
+          "user_id": 1,
+          "first_name": "Charles",
+          "last_name": "Dickens",
+          "email": "charles.dickens@gmail.com",
+          "address": "",
+          "phone_number": "",
+          "date_of_birth": "1909-08-01T00:00:00.000Z",
+          "fav_food": "burger",
+          "personality": "",
+          "bio": "",
+          "gender": "Female",
+          "reason": "",
+          "job_title": "Author",
+          "coffee_tea": "Tea",
+          "image_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
         },
         {
-          "username": "grumpy19",
-          "name": "Paul Grump",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
+          "user_id": 2,
+          "first_name": "Jeremy",
+          "last_name": "Strong",
+          "email": "jeremy.strong@gmail.com",
+          "address": "",
+          "phone_number": "",
+          "date_of_birth": "1909-08-01T00:00:00.000Z",
+          "fav_food": "pizza",
+          "personality": "",
+          "bio": "",
+          "gender": "Male",
+          "reason": "",
+          "job_title": "Author",
+          "coffee_tea": "Tea",
+          "image_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
         },
         {
-          "username": "happyamy2016",
-          "name": "Amy Happy",
-          "avatar_url": "https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729"
+          "user_id": 3,
+          "first_name": "Riaan",
+          "last_name": "Ri",
+          "email": "riaan.ri@gmail.com",
+          "address": "",
+          "phone_number": "",
+          "date_of_birth": "1909-08-01T00:00:00.000Z",
+          "fav_food": "burger",
+          "personality": "",
+          "bio": "",
+          "gender": "Male",
+          "reason": "",
+          "job_title": "Paleontologist",
+          "coffee_tea": "Coffee",
+          "image_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
         },
         {
-          "username": "cooljmessy",
-          "name": "Peter Messy",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002"
-        },
-        {
-          "username": "weegembump",
-          "name": "Gemma Bump",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/7e/MrMen-Bump.png/revision/latest?cb=20180123225553"
-        },
-        {
-          "username": "jessjelly",
-          "name": "Jess Jelly",
-          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141"
+          "user_id": 4,
+          "first_name": "Rick",
+          "last_name": "Matin",
+          "email": "rick.martin@gmail.com",
+          "address": "",
+          "phone_number": "",
+          "date_of_birth": "1909-08-01T00:00:00.000Z",
+          "fav_food": "burger",
+          "personality": "",
+          "bio": "",
+          "gender": "Male",
+          "reason": "",
+          "job_title": "Cricketer",
+          "coffee_tea": "Coffee",
+          "image_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
         }
       ]
     }

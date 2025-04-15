@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const endpointsJson = require("../endpoints.json");
 const fastifyApp = require("../app");
+const users = require("../db/data/test-data/users");
 
 let server;
 
@@ -38,7 +39,28 @@ describe("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
+        console.log(JSON.stringify(body));
+        const usersArray = body.users;
+        expect(Array.isArray(usersArray)).toBe(true);
+        expect(usersArray.length).toBe(4);
+
+        usersArray.forEach((user) => {
+          expect(typeof user.user_id).toBe("number");
+          expect(typeof user.first_name).toBe("string");
+          expect(typeof user.last_name).toBe("string");
+          expect(typeof user.email).toBe("string");
+          expect(typeof user.address).toBe("string");
+          expect(typeof user.date_of_birth).toBe("string");
+          expect(typeof user.fav_food).toBe("string");
+          expect(typeof user.personality).toBe("string");
+          expect(typeof user.bio).toBe("string");
+          expect(typeof user.gender).toBe("string");
+          expect(typeof user.reason).toBe("string");
+          expect(typeof user.job_title).toBe("string");
+          // expect(typeof user.pet_owner).toBe("string");
+          expect(typeof user.coffee_tea).toBe("string");
+          expect(typeof user.image_url).toBe("string");
+        });
       });
   });
 });
