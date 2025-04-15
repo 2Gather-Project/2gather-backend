@@ -2,21 +2,21 @@ module.exports = [
   {
     sender: "1",
     receiver: "2",
-    status: "Requested",
+    status: "REQUESTED",
   },
   {
     sender: "1",
     receiver: "3",
-    status: "Requested",
+    status: "REQUESTED",
   },
   {
     sender: "2",
     receiver: "3",
-    status: "Requested",
+    status: "REQUESTED",
   },
   {
     sender: "2",
     receiver: "4",
-    status: "Requested",
+    status: "REQUESTED",
   },
 ];

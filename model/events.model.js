@@ -14,7 +14,7 @@ const possible_order = ["asc", "desc"];
 
 const fetchEvents = ({
   sort_by = "created_at",
-  order = "desc",
+  order = "asc",
   column_name = undefined,
   value = undefined,
 }) => {
@@ -57,8 +57,8 @@ const fetchEvents = ({
   });
 };
 
-const fetchEventsById = (article_id) => {
-  let queryString = `SELECT articles.*, COUNT(comments.comment_id)  as comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+const fetchEventsById = (user_id) => {
+  let queryString = `SELECT events.*, COUNT(comments.comment_id)  as comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
   const queryParams = [];
 
   if (article_id) {

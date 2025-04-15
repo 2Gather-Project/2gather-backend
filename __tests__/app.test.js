@@ -119,5 +119,3 @@ describe("GET /api/events", () => {
   //     });
   // });
 });
-
-
