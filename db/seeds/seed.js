@@ -13,30 +13,30 @@ const seed = ({
   interestData,
 }) => {
   return db
-    .query("DROP TABLE IF EXISTS event_user_activity CASCADE")
+    .query("DROP TABLE IF EXISTS event_user_activity")
     .then(() => {
       console.log("1");
-      db.query("DROP TABLE IF EXISTS friend_requests CASCADE");
+      db.query("DROP TABLE IF EXISTS friend_requests");
     })
     .then(() => {
       console.log("2");
-      db.query("DROP TABLE IF EXISTS events CASCADE");
+      db.query("DROP TABLE IF EXISTS events");
     })
     .then(() => {
       console.log("3");
-      db.query("DROP TABLE IF EXISTS users CASCADE");
+      db.query("DROP TABLE IF EXISTS users");
     })
     .then(() => {
       console.log("4");
-      db.query("DROP TYPE IF EXISTS interests CASCADE");
+      db.query("DROP TYPE IF EXISTS interests");
     })
     .then(() => {
       console.log("5");
-      db.query("DROP TYPE IF EXISTS event_status CASCADE");
+      db.query("DROP TYPE IF EXISTS event_status");
     })
     .then(() => {
       console.log("6");
-      db.query("DROP TYPE IF EXISTS user_activity_status CASCADE");
+      db.query("DROP TYPE IF EXISTS user_activity_status");
     })
     .then(() => {
       console.log("7");
@@ -156,6 +156,8 @@ function createFriendRequests() {
     request_id SERIAL PRIMARY KEY,
     sender_id INT,
     receiver_id INT,
+     FOREIGN KEY (sender_id) REFERENCES users(user_id),
+      FOREIGN KEY (receiver_id) REFERENCES users(user_id),
     status USER_ACTIVITY_STATUS NOT NULL
     )`
   );
@@ -166,6 +168,8 @@ function createBlockedUsers() {
     `CREATE TABLE blocked_users (
     user_id INT NOT NULL,
     blocked_user_id INT NOT NULL,
+     FOREIGN KEY (user_id) REFERENCES users(user_id),
+      FOREIGN KEY (blocked_user_id) REFERENCES users(user_id),
     PRIMARY KEY(user_id, blocked_user_id)
     )`
   );
@@ -211,8 +215,6 @@ function insertEventsData(eventsData) {
       event.title,
       event.description,
       event.location,
-      event.category,
-      event.status,
       event.time,
       event.created_at,
     ];
@@ -222,7 +224,7 @@ function insertEventsData(eventsData) {
   return db.query(
     format(
       `INSERT INTO events 
-                  (user_id,title,description,location,category,status,time ,created_at)
+                  (user_id,title,description,location,time ,created_at)
                   VALUES
                   %L RETURNING *;`,
       events
