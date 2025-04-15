@@ -1,23 +1,21 @@
 module.exports = [
   {
-    name: "Cooking",
-  },
-  {
-    name: "Cooking",
-  },
-  {
-    name: "Dancing",
-  },
-  {
-    name: "Dog Walking",
-  },
-  {
-    name: "Theater",
-  },
-  {
-    name: "Movies",
-  },
-  {
-    name: "Reading",
+    enum: [
+      "FOOD",
+      "DANCING",
+      "HIKING",
+      "THEATRE",
+      "READING",
+      "MUSEUMS & GALLERIES",
+      "CAFES",
+      "BOARD GAMES",
+      "VIDEO GAMES",
+      "ART",
+      "TECHNOLOGY",
+      "MUSIC",
+      "FILMS & TELEVISION",
+      "GYM & FITNESS",
+      "YOGA",
+    ],
   },
 ];
