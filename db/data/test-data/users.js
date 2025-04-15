@@ -49,7 +49,7 @@ module.exports = [
     reason: "",
     job_title: "Paleontologist",
     pet_owner: false,
-    coffee_tea: "None",
+    coffee_tea: "Coffee",
     image_url:
       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
   },
@@ -65,7 +65,7 @@ module.exports = [
     bio: "",
     gender: "Male",
     reason: "",
-    job_title: "Criketer",
+    job_title: "Cricketer",
     pet_owner: false,
     coffee_tea: "Coffee",
     image_url:

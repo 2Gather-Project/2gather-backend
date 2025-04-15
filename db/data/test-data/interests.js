@@ -1,5 +1,5 @@
 module.exports = [
   {
-    enum: ["Cooking", "Dancing", "Dog Walking", "Theater", "Reading"],
+    enum: ["COOKING", "DANCING", "DOG WALKING", "THEATRE", "READING"],
   },
 ];
