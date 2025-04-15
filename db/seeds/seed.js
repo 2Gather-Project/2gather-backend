@@ -69,6 +69,10 @@ const seed = ({
     .then(() => {
       console.log("14");
       return insertDataUsers(usersData);
+    })
+    .then(() => {
+      console.log("15");
+      return insertEventsData(eventsData);
     });
 };
 
@@ -122,8 +126,8 @@ function createEvents() {
     title VARCHAR NOT NULL,
     description VARCHAR NOT NULL,
     location VARCHAR NOT NULL,
-    category INTERESTS NOT NULL,
-    status EVENT_STATUS NOT NULL,
+    category INTERESTS DEFAULT 'OTHER',
+    status EVENT_STATUS DEFAULT 'ACTIVE',
     time VARCHAR,
     created_at DATE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE)
@@ -195,6 +199,33 @@ function insertDataUsers(usersData) {
                   VALUES
                   %L RETURNING *;`,
       users
+    )
+  );
+}
+
+function insertEventsData(eventsData) {
+  console.log(eventsData);
+  const events = eventsData.map((event) => {
+    return [
+      event.user_id,
+      event.title,
+      event.description,
+      event.location,
+      event.category,
+      event.status,
+      event.time,
+      event.created_at,
+    ];
+  });
+
+  console.log(events);
+  return db.query(
+    format(
+      `INSERT INTO events 
+                  (user_id,title,description,location,category,status,time ,created_at)
+                  VALUES
+                  %L RETURNING *;`,
+      events
     )
   );
 }
