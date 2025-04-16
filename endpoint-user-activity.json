@@ -1,0 +1,25 @@
+{
+  "GET /api/event-user-activity/:event_id": {
+    "description": "list all the event_user_activity for a certain event with their information",
+    "exampleResponse": {
+      "event_user_activity": [
+        {
+          "id": 1,
+          "event_id": 1,
+          "host_id": 1,
+          "attendee_id": 2,
+          "user_status": "REQUESTED",
+          "user_approved": false
+        },
+        {
+          "id": 2,
+          "event_id": 1,
+          "host_id": 1,
+          "attendee_id": 3,
+          "user_status": "REQUESTED",
+          "user_approved": false
+        }
+      ]
+    }
+  }
+}
