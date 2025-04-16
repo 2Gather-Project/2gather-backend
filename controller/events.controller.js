@@ -1,4 +1,10 @@
-const { fetchEvents, addEvent, updateEvent, fetchEventById } = require("../model/events.model");
+const {
+  fetchEvents,
+  addEvent,
+  updateEvent,
+  fetchEventById,
+  dropEventById,
+} = require("../model/events.model");
 
 const getEvents = (request, reply) => {
   const { sort_by, order, column_name, value } = request.query;
@@ -61,4 +67,26 @@ const patchEvents = (request, reply) => {
     });
 };
 
-module.exports = { getEvents, getEventsById, postEvents, patchEvents };
+const deleteEvent = (request, reply) => {
+  const { event_id } = request.params;
+
+  dropEventById(event_id)
+    .then((rows) => {
+      if (rows.length > 0) {
+        reply.code(204).send({ msg: "Deletion successfull !!" });
+      } else {
+        reply.code(404).send({ msg: "Already Deleted !!" });
+      }
+    })
+    .catch((err) => {
+      reply.send(err);
+    });
+};
+
+module.exports = {
+  getEvents,
+  getEventsById,
+  postEvents,
+  patchEvents,
+  deleteEvent,
+};

@@ -1,17 +1,14 @@
 module.exports = [
   {
-    user1_id: 1,
-    user2_id: 2,
-    event_id: 1,
+    initiator: 1,
+    receiver: 2,
   },
   {
-    user1_id: 1,
-    user2_id: 3,
-    event_id: 2,
+    initiator: 1,
+    receiver: 3,
   },
   {
-    user1_id: 2,
-    user2_id: 3,
-    event_id: 3,
+    initiator: 2,
+    receiver: 3,
   },
 ];
