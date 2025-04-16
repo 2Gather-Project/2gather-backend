@@ -32,6 +32,8 @@ const getEventsById = (request, reply) => {
 };
 
 const postEvents = (request, reply) => {
+  // console.log(request.body);
+  const { user_id, topic, description, location, category } = request.body;
   console.log(request.body);
   const { user_id, topic, description, location, category } = request.body;
 

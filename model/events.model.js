@@ -53,9 +53,14 @@ const fetchEvents = ({
   if (sort_by && order) {
     orderByQuery = `ORDER BY events.${sort_by} ${order}`;
   }
+  // console.log("events:");
   console.log("events:");
   selectQuery += whereQyery + groupByQuery + orderByQuery;
-  console.log("events:", selectQuery);
+  // console.log("events:", selectQuery);
+
+  //selectQuery += whereQyery + groupByQuery + orderByQuery;
+
+  selectQuery += whereQyery + orderByQuery;
 
   return db.query(selectQuery).then(({ rows }) => {
     if (rows.length === 0) {
