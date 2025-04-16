@@ -39,11 +39,9 @@ describe("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body }) => {
-        console.log(JSON.stringify(body));
         const usersArray = body.users;
         expect(Array.isArray(usersArray)).toBe(true);
         expect(usersArray.length).toBe(4);
-
         usersArray.forEach((user) => {
           expect(typeof user.user_id).toBe("number");
           expect(typeof user.first_name).toBe("string");
@@ -57,12 +55,12 @@ describe("GET /api/users", () => {
           expect(typeof user.gender).toBe("string");
           expect(typeof user.reason).toBe("string");
           expect(typeof user.job_title).toBe("string");
-          // expect(typeof user.pet_owner).toBe("string");
           expect(typeof user.coffee_tea).toBe("string");
           expect(typeof user.image_url).toBe("string");
         });
       });
   });
+
   test("404: Responds with path not found", () => {
     return request(server)
       .get("/api/event")
@@ -95,7 +93,6 @@ describe("GET /api/users", () => {
         expect(events.length).toBe(1);
         expect(events).toBeSortedBy("created_at", { ascending: true });
         events.forEach((event) => {
-          console.log(event);
           expect(typeof event.title).toBe("string");
           expect(event.description).toBe(
             "Visit the museum and chat about history and life."
@@ -104,4 +101,26 @@ describe("GET /api/users", () => {
         });
       });
   });
+});
+
+test("201: Creates a new user", () => {
+  const newUser = {
+    first_name: "Charles",
+    last_name: "Dickens",
+    email: "charles.dickens@gmail.com",
+    address: "",
+    phone_number: "",
+    date_of_birth: "08-01-1909",
+    fav_food: "burger",
+    personality: "",
+    bio: "",
+    gender: "Female",
+    reason: "",
+    job_title: "Author",
+    pet_owner: "",
+    coffee_tea: "Tea",
+    image_url:
+      "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
+  };
+  return request(server);
 });
