@@ -7,15 +7,17 @@ const possible_column_names = [
   "user_id",
   "location",
   "category",
+  "status",
   "created_at",
+  "event_date",
   "img_url",
 ];
 
 const possible_order = ["asc", "desc"];
 
 const fetchEvents = ({
-  sort_by = "created_at",
-  order = "desc",
+  sort_by = "event_date",
+  order = "asc",
   column_name = undefined,
   value = undefined,
 }) => {
@@ -33,75 +35,101 @@ const fetchEvents = ({
 
   let selectQuery = `SELECT * FROM events `;
 
-  const groupByQuery = `GROUP BY events.event_id `;
+  //const groupByQuery = `GROUP BY events.user_id `;
 
   let whereQyery = "";
   let orderByQuery = "";
 
-  if (column_name && value) {
+  if (column_name && value && Number(value)) {
     whereQyery = `WHERE ${column_name} = '${value}' `;
+  } else if (column_name && value && typeof value === "string") {
+    whereQyery = `WHERE ${column_name} ILIKE '%${value}%' `;
+  }
+
+  if (value && (column_name === "status" || column_name === "category")) {
+    whereQyery = `WHERE ${column_name} = '${value.toUpperCase()}' `;
   }
 
   if (sort_by && order) {
     orderByQuery = `ORDER BY events.${sort_by} ${order}`;
   }
-  console.log("events:");
-  selectQuery += whereQyery + groupByQuery + orderByQuery;
-  console.log("events:", selectQuery);
+
+  //selectQuery += whereQyery + groupByQuery + orderByQuery;
+
+  selectQuery += whereQyery + orderByQuery;
 
   return db.query(selectQuery).then(({ rows }) => {
     if (rows.length === 0) {
-      return Promise.reject({ status: 404, msg: "Event id not found!!" });
+      return Promise.reject({ status: 404, msg: "Resource not found!!" });
     } else {
       return rows;
     }
   });
 };
 
-const fetchEventsById = (article_id) => {
-  let queryString = `SELECT articles.*, COUNT(comments.comment_id)  as comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
-  const queryParams = [];
-
-  if (article_id) {
-    queryString += `WHERE articles.article_id = $1 group by articles.article_id`;
-    queryParams.push(article_id);
-  }
-
-  return db.query(`${queryString};`, queryParams).then(({ rows }) => {
-    if (!rows[0]) {
-      return Promise.reject({ status: 404, msg: "Article id not found!!" });
-    } else {
-      return rows[0];
-    }
-  });
-};
-
-
-const addEvent = ({ user_id, topic, description, location, category }) => {
+const addEvent = ({
+  user_id,
+  title,
+  description,
+  location,
+  category,
+  event_date,
+}) => {
+  console.log(category);
   return db
     .query(
-      format(
-        `INSERT INTO events
-                      (user_id,title,description,location)
+      `INSERT INTO events
+                      (user_id,title,description,location,category,event_date)
                       VALUES
-                      %L RETURNING *;`,
-        [
-          {
-            user_id,
-            topic,
-            description,
-            location,
-          },
-        ]
-      )
+                      ($1,$2,$3,$4,$5,$6) RETURNING *;`,
+      [user_id, title, description, location, category, event_date]
     )
     .then(({ rows }) => {
       return rows;
     });
 };
 
+const updateEvent = ({
+  title,
+  description,
+  location,
+  category,
+  event_date,
+  event_id,
+}) => {
+  return db
+    .query(
+      `UPDATE events
+        SET TITLE = $1, DESCRIPTION = $2, LOCATION = $3 , CATEGORY = $4, EVENT_DATE= $5
+      WHERE EVENT_ID = $6 RETURNING *;`,
+      [title, description, location, category, event_date, event_id]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
+
+const fetchEventById = (event_id) => {
+  let queryString = `SELECT * from events `;
+  const queryParams = [];
+
+  if (event_id) {
+    queryString += `where events.event_id = $1`;
+    queryParams.push(event_id);
+  }
+
+  return db.query(`${queryString};`, queryParams).then(({ rows }) => {
+    if (!rows[0]) {
+      return Promise.reject({ status: 404, msg: "Event not found!!" });
+    } else {
+      return rows[0];
+    }
+  });
+};
+
 module.exports = {
   fetchEvents,
-  fetchEventsById,
   addEvent,
+  updateEvent,
+  fetchEventById
 };
