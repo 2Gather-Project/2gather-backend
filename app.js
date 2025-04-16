@@ -4,7 +4,13 @@ const {
 } = require("./controller/endpoints.controller.js");
 const fastify = require("fastify");
 const { allUsers } = require("./controller/users.controller.js");
-const { getEvents, postEvents } = require("./controller/events.controller.js");
+const {
+  getEvents,
+  postEvents,
+  patchEvents,
+  getEventsById,
+} = require("./controller/events.controller.js");
+const { fetchEventById } = require("./model/events.model.js");
 
 const fastifyApp = fastify({
   logger: true,
@@ -14,7 +20,9 @@ fastifyApp.get("/api", getEndpoints);
 fastifyApp.get("/api/users", allUsers);
 fastifyApp.get("/api/events", getEvents);
 //fastifyApp.get("/api/events/:user_id", getEventsNotBelongingToUserId);
-fastifyApp.post("/api/events",postEvents);
+fastifyApp.post("/api/events", postEvents);
+fastifyApp.patch("/api/events/:event_id", patchEvents);
+fastifyApp.get("/api/events/:event_id", getEventsById);
 
 fastifyApp.all("/*", handleNonExistentEndpoint);
 
