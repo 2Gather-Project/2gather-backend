@@ -31,91 +31,64 @@ test("404: Responds with error if endpoint is not found", () => {
     });
 });
 
-test("200: Responds with an array of objects of users", () => {
+test("400: Responds with error if user is invalid", () => {
   return request(server)
-    .get("/api/users")
-    .expect(200)
-    .then(({ body }) => {
-      const usersArray = body.users;
-      usersArray.forEach((user) => {
-        expect(user).toHaveProperty("user_id");
-        expect(user).toHaveProperty("first_name");
-        expect(user).toHaveProperty("last_name");
-        expect(user).toHaveProperty("email");
-        expect(user).toHaveProperty("address");
-        expect(user).toHaveProperty("date_of_birth");
-        expect(user).toHaveProperty("fav_food");
-        expect(user).toHaveProperty("personality");
-        expect(user).toHaveProperty("bio");
-        expect(user).toHaveProperty("gender");
-        expect(user).toHaveProperty("reason");
-        expect(user).toHaveProperty("job_title");
-        expect(user).toHaveProperty("coffee_tea");
-        expect(user).toHaveProperty("image_url");
-      });
+    .get("/api/users/ghdifi")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("Invalid user");
     });
 });
 
-// test("400: Responds with error if user is invalid", () => {
-//   return request(server)
-//     .get("/api/users/ghdifi")
-//     .expect(400)
-//     .then(({ body: { msg } }) => {
-//       expect(msg).toBe("Invalid user");
-//     });
-// });
+test("200: Responds with a single user", () => {
+  return request(server)
+    .get("/api/users/1")
+    .expect(200)
+    .then(({ body }) => {
+      console.log(body);
+      const user = body.user;
+      expect(user).toHaveProperty("user_id");
+      expect(typeof user.user_id).toBe("number");
+      expect(typeof user.first_name).toBe("string");
+      expect(typeof user.last_name).toBe("string");
+      expect(typeof user.email).toBe("string");
+      expect(typeof user.address).toBe("string");
+      expect(typeof user.date_of_birth).toBe("string");
+      expect(typeof user.fav_food).toBe("string");
+      expect(typeof user.personality).toBe("string");
+      expect(typeof user.bio).toBe("string");
+      expect(typeof user.gender).toBe("string");
+      expect(typeof user.reason).toBe("string");
+      expect(typeof user.job_title).toBe("string");
+      expect(typeof user.coffee_tea).toBe("string");
+      expect(typeof user.image_url).toBe("string");
+    });
+});
 
-// test("200: Responds with a single user", () => {
-//   return request(server)
-//     .get("/api/users/3")
-//     .expect(200)
-//     .then(({ body }) => {
-//       const usersArray = body.users;
-//       expect(Array.isArray(usersArray)).toBe(true);
-//       expect(usersArray.length).toBe(4);
-//       usersArray.forEach((user) => {
-//         expect(typeof user.user_id).toBe("number");
-//         expect(typeof user.first_name).toBe("string");
-//         expect(typeof user.last_name).toBe("string");
-//         expect(typeof user.email).toBe("string");
-//         expect(typeof user.address).toBe("string");
-//         expect(typeof user.date_of_birth).toBe("string");
-//         expect(typeof user.fav_food).toBe("string");
-//         expect(typeof user.personality).toBe("string");
-//         expect(typeof user.bio).toBe("string");
-//         expect(typeof user.gender).toBe("string");
-//         expect(typeof user.reason).toBe("string");
-//         expect(typeof user.job_title).toBe("string");
-//         expect(typeof user.coffee_tea).toBe("string");
-//         expect(typeof user.image_url).toBe("string");
-//       });
-//     });
-// });
+test("404: Responds with error if endpoint is not found", () => {
+  return request(server)
+    .get("/api/users/999999")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("Invalid Endpoint!!");
+    });
+});
 
-// test("404: Responds with error if endpoint is not found", () => {
-//   return request(server)
-//     .get("/api/users/999999")
-//     .expect(404)
-//     .then(({ body: { msg } }) => {
-//       expect(msg).toBe("Invalid Endpoint!!");
-//     });
-// });
-
-test("201: Creates a new user", () => {
+test("201: Responds with creating a new user", () => {
   const newUser = {
-    first_name: "steven",
-    last_name: "Dddd",
+    first_name: "Steven",
+    last_name: "Dodd",
     email: "steven@gmail.com",
-    address: "london",
-    phone_number: "",
-    date_of_birth: "1999-04-11",
-    fav_food: "fish",
-    personality: "happy",
-    bio: "hello",
-    gender: "male",
-    reason: "friends",
-    job_title: "waiter",
-    coffee_tea: "coffee",
+    address: "London",
+    phone_number: "07207123456",
+    date_of_birth: "1999-04-10",
+    fav_food: "Fish",
+    personality: "Happy",
+    bio: "Hello!",
+    gender: "Male",
+    reason: "Friends",
+    job_title: "Waiter",
+    coffee_tea: "Coffee",
     image_url:
       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
   };
@@ -124,41 +97,28 @@ test("201: Creates a new user", () => {
     .send(newUser)
     .expect(201)
     .then(({ body }) => {
-      const usersArray = body.users;
-      expect(Array.isArray(usersArray)).toBe(true);
-      expect(usersArray.length).toBe(4);
-      usersArray.forEach((user) => {
-        expect(typeof user.user_id).toBe("number");
-        expect(typeof user.first_name).toBe("string");
-        expect(typeof user.last_name).toBe("string");
-        expect(typeof user.email).toBe("string");
-        expect(typeof user.address).toBe("string");
-        expect(typeof user.date_of_birth).toBe("string");
-        expect(typeof user.fav_food).toBe("string");
-        expect(typeof user.personality).toBe("string");
-        expect(typeof user.bio).toBe("string");
-        expect(typeof user.gender).toBe("string");
-        expect(typeof user.reason).toBe("string");
-        expect(typeof user.job_title).toBe("string");
-        expect(typeof user.coffee_tea).toBe("string");
-        expect(typeof user.image_url).toBe("string");
-      });
+      const user = body.user;
+      const reformattedDate = user.date_of_birth;
+      const expectedDate = newUser.date_of_birth;
+      expect(reformattedDate).toBe(expectedDate);
+      expect(typeof user.user_id).toBe("number");
+      expect(user).toMatchObject(newUser);
     });
 });
 
-test("400: Responds with error message if one field is missing", () => {
+test("400: Responds with error message if required fields are missing", () => {
   const newUser = {
     first_name: "",
-    last_name: "Dickens",
-    email: "charles.dickens@gmail.com",
+    last_name: "",
+    email: "",
     address: "",
-    phone_number: "",
+    phone_number: "07207123456",
     date_of_birth: "1999-04-11",
-    fav_food: "burger",
-    personality: "",
-    bio: "",
+    fav_food: "Pasta",
+    personality: "Introverted",
+    bio: "Hello!",
     gender: "Female",
-    reason: "",
+    reason: "Friends",
     job_title: "Author",
     coffee_tea: "Tea",
     image_url:
@@ -175,24 +135,24 @@ test("400: Responds with error message if one field is missing", () => {
 
 test("404: Responds with error if endpoint is not found", () => {
   const newUser = {
-    first_name: "",
-    last_name: "Dickens",
-    email: "charles.dickens@gmail.com",
-    address: "",
-    phone_number: "",
+    first_name: "Katie",
+    last_name: "Hardy",
+    email: "katie@gmail.com",
+    address: "London",
+    phone_number: "0720712345",
     date_of_birth: "1999-04-11",
-    fav_food: "burger",
-    personality: "",
-    bio: "",
+    fav_food: "Burger",
+    personality: "Happy",
+    bio: "Hello!",
     gender: "Female",
-    reason: "",
+    reason: "Friends",
     job_title: "Author",
     coffee_tea: "Tea",
     image_url:
       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
   };
   return request(server)
-    .post("/api/users")
+    .post("/api/usr")
     .send(newUser)
     .expect(404)
     .then(({ body: { msg } }) => {
@@ -200,53 +160,42 @@ test("404: Responds with error if endpoint is not found", () => {
     });
 });
 
-test("200: Responds with edited user", () => {
+test("200: Responds with edited user information", () => {
   const updateUser = {
-    address: "",
-    phone_number: "",
-    fav_food: "pizza",
-    personality: "happy",
-    bio: "hello",
+    address: "Edinburgh",
+    phone_number: "0720712346",
+    fav_food: "Pizza",
+    personality: "Sad",
+    bio: "Nice to meet you!",
     gender: "Female",
-    reason: "friends",
+    reason: "Events",
     job_title: "Chef",
     coffee_tea: "Coffee",
     image_url:
       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
-  }
-    .patch("/api/users/4")
+  };
+  return request(server)
+    .patch("/api/users/1")
     .send(updateUser)
     .expect(200)
     .then(({ body }) => {
-      const usersArray = body.users;
-      expect(Array.isArray(usersArray)).toBe(true);
-      expect(usersArray.length).toBe(4);
-      usersArray.forEach((user) => {
-        expect(typeof user.user_id).toBe("number");
-        expect(typeof user.address).toBe("string");
-        expect(typeof user.fav_food).toBe("string");
-        expect(typeof user.personality).toBe("string");
-        expect(typeof user.bio).toBe("string");
-        expect(typeof user.gender).toBe("string");
-        expect(typeof user.reason).toBe("string");
-        expect(typeof user.job_title).toBe("string");
-        expect(typeof user.coffee_tea).toBe("string");
-        expect(typeof user.image_url).toBe("string");
-      });
+      const user = body.user;
+      expect(typeof user.user_id).toBe("number");
+      expect(user).toMatchObject(updateUser);
     });
 });
 
 test("400: Responds with error if user id is not a number", () => {
   const updateUser = {
-    address: "",
-    phone_number: "",
-    fav_food: "pizza",
-    personality: "happy",
-    bio: "hello",
+    address: "Edinburgh",
+    phone_number: "0720712346",
+    fav_food: "Pizza",
+    personality: "Crazy",
+    bio: "Hello",
     gender: "Female",
-    reason: "friends",
-    job_title: "Chef",
-    pet_owner: "yes",
+    reason: "Friends",
+    job_title: "Actor",
+    pet_owner: "Yes",
     coffee_tea: "Coffee",
     image_url:
       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
@@ -256,30 +205,6 @@ test("400: Responds with error if user id is not a number", () => {
     .send(updateUser)
     .expect(400)
     .then(({ body: { msg } }) => {
-      expect(msg).toBe("Invalid Endpoint!!");
-    });
-});
-
-test("404: Responds with error if user id is not a number", () => {
-  const updateUser = {
-    address: "",
-    phone_number: "",
-    fav_food: "pizza",
-    personality: "happy",
-    bio: "hello",
-    gender: "Female",
-    reason: "friends",
-    job_title: "Chef",
-    pet_owner: "yes",
-    coffee_tea: "Coffee",
-    image_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
-  };
-  return request(server)
-    .patch("/api/users/999999")
-    .send(updateUser)
-    .expect(404)
-    .then(({ body: { msg } }) => {
-      expect(msg).toBe("Invalid Endpoint!!");
+      expect(msg).toBe("Invalid user_id");
     });
 });

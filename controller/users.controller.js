@@ -1,33 +1,36 @@
-const { getUsers, fetchUserByID, postUsers } = require("../model/users.model");
+const {
+  getUsers,
+  fetchUserByID,
+  postUsers,
+  updateUser,
+} = require("../model/users.model");
 
 const allUsers = (request, reply, next) => {
-  getUsers()
-    .then((users) => {
-      reply.send({ users });
-    })
-    .catch((err) => {
-      //  next(err);
-    });
-};
-const getUserByID = (request, reply, next) => {
-  const { user_id } = request.params;
-  fetchUserByID(user_id)
-    .then((user) => {
-      console.log(user);
-      reply.send({ user_id });
-    })
-    .catch((err) => {
-      // next(err);
-    });
+  getUsers().then((users) => {
+    reply.send({ users });
+  });
 };
 
-const createUsers = (request, reply, next) => {
+const getUserByID = (request, reply, next) => {
+  const { user_id } = request.params;
+  if (isNaN(user_id)) {
+    return reply.status(400).send({ msg: "Invalid user" });
+  }
+  fetchUserByID(user_id).then((user) => {
+    if (!user) {
+      return reply.status(404).send({ msg: "Invalid Endpoint!!" });
+    }
+    reply.status(200).send({ user });
+  });
+};
+
+const createUser = async (request, reply) => {
   const {
-    user_id,
     first_name,
     last_name,
     email,
     address,
+    phone_number,
     date_of_birth,
     fav_food,
     personality,
@@ -35,33 +38,50 @@ const createUsers = (request, reply, next) => {
     gender,
     reason,
     job_title,
-    pet_owner,
     coffee_tea,
     image_url,
   } = request.body;
-  postUsers(
-    user_id,
-    first_name,
-    last_name,
-    email,
-    address,
-    date_of_birth,
-    fav_food,
-    personality,
-    bio,
-    gender,
-    reason,
-    job_title,
-    pet_owner,
-    coffee_tea,
-    image_url
-  )
-    .then((user) => {
-      reply.send({ user });
-    })
-    .catch((err) => {
-      // next(err);
-    });
+
+  if (!first_name || !last_name || !email || !address) {
+    return reply.status(400).send({ msg: "Field is required" });
+  }
+
+  try {
+    const user = await postUsers(
+      first_name,
+      last_name,
+      email,
+      address,
+      phone_number,
+      date_of_birth,
+      fav_food,
+      personality,
+      bio,
+      gender,
+      reason,
+      job_title,
+      coffee_tea,
+      image_url
+    );
+    reply.status(201).send({ user });
+  } catch (err) {
+    console.error("Error creating user:", err);
+    reply.status(500).send({ msg: "Internal server error" });
+  }
 };
 
-module.exports = { allUsers, getUserByID, createUsers };
+const patchUser = (request, reply, next) => {
+  const user_id = Number(request.params.user_id);
+  const updateData = {
+    ...request.body,
+    user_id: Number(user_id),
+  };
+  if (isNaN(user_id)) {
+    return reply.status(400).send({ msg: "Invalid user_id" });
+  }
+  updateUser(updateData).then((updatedUser) => {
+    reply.status(200).send({ user: updatedUser });
+  });
+};
+
+module.exports = { allUsers, getUserByID, createUser, patchUser };
