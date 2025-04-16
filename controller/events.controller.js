@@ -72,7 +72,11 @@ const deleteEvent = (request, reply) => {
 
   dropEventById(event_id)
     .then((rows) => {
-      reply.send({ status: 204, msg: "Deletion successfull !!" });
+      if (rows.length > 0) {
+        reply.code(204).send({ msg: "Deletion successfull !!" });
+      } else {
+        reply.code(404).send({ msg: "Already Deleted !!" });
+      }
     })
     .catch((err) => {
       reply.send(err);
