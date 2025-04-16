@@ -7,6 +7,13 @@ module.exports = [
     user_approved: false,
   },
   {
+    event_id: 1,
+    host_id: 1,
+    attendee_id: 3,
+    user_status: "REQUESTED",
+    user_approved: false,
+  },
+  {
     event_id: 2,
     host_id: 2,
     attendee_id: 3,
