@@ -17,4 +17,123 @@ const getUsers = () => {
   });
 };
 
-module.exports = { usersExists, getUsers };
+const fetchUserByID = (user_id) => {
+  return db
+    .query(`SELECT * FROM users WHERE user_id = $1`, [user_id])
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
+
+const postUsers = async (
+  first_name,
+  last_name,
+  email,
+  address,
+  phone_number,
+  date_of_birth,
+  fav_food,
+  personality,
+  bio,
+  gender,
+  reason,
+  job_title,
+  coffee_tea,
+  image_url
+) => {
+  const query = `
+    INSERT INTO users (
+      first_name, last_name, email, address, phone_number, date_of_birth, 
+      fav_food, personality, bio, gender, reason, job_title, coffee_tea, image_url
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    RETURNING *;
+  `;
+  const formattedDate = date_of_birth;
+  const values = [
+    first_name,
+    last_name,
+    email,
+    address,
+    phone_number,
+    formattedDate,
+    fav_food,
+    personality,
+    bio,
+    gender,
+    reason,
+    job_title,
+    coffee_tea,
+    image_url,
+  ];
+
+  try {
+    const result = await db.query(query, values);
+    const user = result.rows[0];
+    user.date_of_birth = user.date_of_birth.toLocaleDateString("en-CA");
+    return user;
+  } catch (err) {
+    console.error("Error inserting user:", err);
+    throw err;
+  }
+};
+
+const updateUser = async (body) => {
+  const {
+    address,
+    phone_number,
+    fav_food,
+    personality,
+    bio,
+    gender,
+    reason,
+    job_title,
+    coffee_tea,
+    image_url,
+    user_id,
+  } = body;
+
+  const query = `UPDATE users
+SET 
+  address = $1,
+  phone_number = $2,
+  fav_food = $3,
+  personality = $4,
+  bio = $5,
+  gender = $6,
+  reason = $7,
+  job_title = $8,
+  coffee_tea = $9,
+  image_url = $10
+WHERE user_id = $11
+RETURNING *;`;
+
+  const values = [
+    address,
+    phone_number,
+    fav_food,
+    personality,
+    bio,
+    gender,
+    reason,
+    job_title,
+    coffee_tea,
+    image_url,
+    user_id,
+  ];
+  try {
+    const result = await db.query(query, values);
+    return result.rows[0];
+  } catch (err) {
+    console.error("Error updating user:", err);
+    throw new Error("Error updating user");
+  }
+};
+
+module.exports = {
+  usersExists,
+  getUsers,
+  fetchUserByID,
+  postUsers,
+  updateUser,
+};

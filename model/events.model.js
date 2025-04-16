@@ -53,10 +53,9 @@ const fetchEvents = ({
   if (sort_by && order) {
     orderByQuery = `ORDER BY events.${sort_by} ${order}`;
   }
-
-  //selectQuery += whereQyery + groupByQuery + orderByQuery;
-
-  selectQuery += whereQyery + orderByQuery;
+  console.log("events:");
+  selectQuery += whereQyery + groupByQuery + orderByQuery;
+  console.log("events:", selectQuery);
 
   return db.query(selectQuery).then(({ rows }) => {
     if (rows.length === 0) {
@@ -127,7 +126,7 @@ const fetchEventById = (event_id) => {
   });
 };
 
-const dropEventById = (event_id) => {
+const addEvent = ({ user_id, topic, description, location, category }) => {
   return db
     .query(`DELETE FROM events where event_id = $1 returning *;`, [event_id])
     .then(({ rows }) => {
