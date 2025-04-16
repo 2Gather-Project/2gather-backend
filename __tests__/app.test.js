@@ -63,4 +63,45 @@ describe("GET /api/users", () => {
         });
       });
   });
+  test("404: Responds with path not found", () => {
+    return request(server)
+      .get("/api/event")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid Endpoint!!");
+      });
+  });
+  test("200: Responds with all the events with sort order votes order by desc", () => {
+    return request(server)
+      .get("/api/events?sort_by=created_at&&order=asc")
+      .expect(200)
+      .then(({ body: { events } }) => {
+        expect(events.length).toBe(7);
+        expect(events).toBeSortedBy("created_at", { ascending: true });
+        events.forEach((event) => {
+          expect(typeof event.title).toBe("string");
+          expect(typeof event.description).toBe("string");
+          expect(typeof event.location).toBe("string");
+          expect(typeof event.user_id).toBe("number");
+        });
+      });
+  });
+
+  test("200: Responds with all the events belonging to user_id", () => {
+    return request(server)
+      .get("/api/events?column_name=user_id&&value=1")
+      .expect(200)
+      .then(({ body: { events } }) => {
+        expect(events.length).toBe(1);
+        expect(events).toBeSortedBy("created_at", { ascending: true });
+        events.forEach((event) => {
+          console.log(event);
+          expect(typeof event.title).toBe("string");
+          expect(event.description).toBe(
+            "Visit the museum and chat about history and life."
+          );
+          expect(event.status).toBe("ACTIVE");
+        });
+      });
+  });
 });

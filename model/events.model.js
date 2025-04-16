@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const format = require("pg-format");
 
 const possible_column_names = [
   "description",
@@ -75,40 +76,32 @@ const fetchEventsById = (article_id) => {
   });
 };
 
-const isArticleIdValid = (article_id) => {
-  return db
-    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return false;
-      }
-      return true;
-    });
-};
 
-const updateVotesForArticleId = (article_id, inc_votes) => {
+const addEvent = ({ user_id, topic, description, location, category }) => {
   return db
     .query(
-      `UPDATE articles 
-                    SET votes = votes + $1
-                    WHERE article_id = $2 RETURNING *`,
-      [inc_votes, article_id]
+      format(
+        `INSERT INTO events
+                      (user_id,title,description,location)
+                      VALUES
+                      %L RETURNING *;`,
+        [
+          {
+            user_id,
+            topic,
+            description,
+            location,
+          },
+        ]
+      )
     )
     .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({
-          status: 400,
-          msg: "Article id does not exists",
-        });
-      } else {
-        return rows;
-      }
+      return rows;
     });
 };
 
 module.exports = {
   fetchEvents,
   fetchEventsById,
-  isArticleIdValid,
-  updateVotesForArticleId,
+  addEvent,
 };

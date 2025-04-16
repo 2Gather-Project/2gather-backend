@@ -95,8 +95,8 @@ function createEvents() {
     location VARCHAR NOT NULL,
     category INTERESTS DEFAULT 'OTHER',
     status EVENT_STATUS DEFAULT 'ACTIVE',
-    time VARCHAR,
-    created_at DATE,
+    event_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at DATE NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE)
    `
   );
@@ -208,7 +208,6 @@ function insertEventsData(eventsData) {
       event.title,
       event.description,
       event.location,
-      event.time,
       event.created_at,
     ];
   });
@@ -216,7 +215,7 @@ function insertEventsData(eventsData) {
   return db.query(
     format(
       `INSERT INTO events
-                  (user_id,title,description,location,time ,created_at)
+                  (user_id,title,description,location,created_at)
                   VALUES
                   %L RETURNING *;`,
       events

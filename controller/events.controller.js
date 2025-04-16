@@ -1,7 +1,7 @@
 const {
   fetchEvents,
   fetchEventsById,
-  updateVotesForEventId,
+  addEvent,
 } = require("../model/events.model");
 
 const getEvents = (request, reply) => {
@@ -20,15 +20,19 @@ const getEventsById = (request, reply) => {
   });
 };
 
-const updateEventVotes = (request, reply) => {
-  const { inc_votes } = request.body;
-  const { event_id } = request.params;
-  if (event_id && inc_votes) {
-    updateVotesForEventId(event_id, inc_votes).then((event) => {
-      reply.send({ event: event[0] });
-    });
+const postEvents = (request, reply) => {
+  console.log(request.body);
+  const { user_id, topic, description, location, category } = request.body;
+
+  if (user_id && location) {
+    console.log("posting event:", topic);
+    addEvent({ user_id, topic, description, location, category }).then(
+      (event) => {
+        reply.send({ event: event[0] });
+      }
+    );
   } else {
     Promise.reject({ status: 400, msg: "Bad Request!!" });
   }
 };
-module.exports = { getEvents, getEventsById, updateEventVotes };
+module.exports = { getEvents, getEventsById, postEvents };
