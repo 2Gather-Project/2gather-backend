@@ -126,8 +126,8 @@ function createFriendRequests() {
     request_id SERIAL PRIMARY KEY,
     sender_id INT,
     receiver_id INT,
-    FOREIGN KEY (sender_id) REFERENCES users(user_id),
-    FOREIGN KEY (receiver_id) REFERENCES users(user_id),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES users(user_id) ON DELETE CASCADE,
     status USER_ACTIVITY_STATUS NOT NULL
     )`
   );
@@ -138,8 +138,8 @@ function createBlockedUsers() {
     `CREATE TABLE blocked_users (
     user_id INT NOT NULL,
     blocked_user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (blocked_user_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (blocked_user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     PRIMARY KEY(user_id, blocked_user_id)
     )`
   );
@@ -152,8 +152,8 @@ function createChatMessages() {
     created_at DATE,
     chat_id INT NOT NULL,
     user_id INT NOT NULL,
-    FOREIGN KEY (chat_id) REFERENCES chat_rooms(chat_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id), 
+    FOREIGN KEY (chat_id) REFERENCES chat_rooms(chat_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE, 
     PRIMARY KEY (chat_id, user_id)
     )`
   );
@@ -165,8 +165,8 @@ function createChatRooms() {
     chat_id SERIAL PRIMARY KEY,
     initiator INT NOT NULL,
     receiver INT NOT NULL,
-    FOREIGN KEY (initiator) REFERENCES users(user_id),
-    FOREIGN KEY (receiver) REFERENCES users(user_id)
+    FOREIGN KEY (initiator) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver) REFERENCES users(user_id) ON DELETE CASCADE
     )`
   );
 }
