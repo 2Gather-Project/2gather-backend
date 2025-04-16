@@ -127,9 +127,18 @@ const fetchEventById = (event_id) => {
   });
 };
 
+const dropEventById = (event_id) => {
+  return db
+    .query(`DELETE FROM events where event_id = $1 returning *;`, [event_id])
+    .then(({ rows }) => {
+      console.log("delete:", rows);
+      return rows;
+    });
+};
 module.exports = {
   fetchEvents,
   addEvent,
   updateEvent,
-  fetchEventById
+  fetchEventById,
+  dropEventById,
 };

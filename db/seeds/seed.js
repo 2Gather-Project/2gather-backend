@@ -111,6 +111,9 @@ function createEventUserActivity() {
     attendee_id INT NOT NULL,
     user_status USER_ACTIVITY_STATUS,
     user_approved BOOLEAN,
+    FOREIGN KEY (event_id) REFERENCES events(event_id)  ON DELETE CASCADE,
+    FOREIGN KEY (host_id) REFERENCES users(user_id)  ON DELETE CASCADE,
+    FOREIGN KEY (attendee_id) REFERENCES users(user_id)  ON DELETE CASCADE,
     PRIMARY KEY (event_id, host_id, attendee_id)
     )
     `
@@ -160,12 +163,10 @@ function createChatRooms() {
   return db.query(
     `CREATE TABLE chat_rooms (
     chat_id SERIAL PRIMARY KEY,
-    user1_id INT NOT NULL,
-    user2_id INT NOT NULL,
-    event_id INT NOT NULL,
-    FOREIGN KEY (user1_id) REFERENCES users(user_id),
-    FOREIGN KEY (user2_id) REFERENCES users(user_id),
-    FOREIGN KEY (event_id) REFERENCES events(event_id)
+    initiator INT NOT NULL,
+    receiver INT NOT NULL,
+    FOREIGN KEY (initiator) REFERENCES users(user_id),
+    FOREIGN KEY (receiver) REFERENCES users(user_id)
     )`
   );
 }
@@ -257,12 +258,12 @@ function insertFriendRequest(friendRequestsData) {
 
 function insertChatRooms(chatRoomsData) {
   const chat_rooms = chatRoomsData.map((chat) => {
-    return [chat.user1_id, chat.user2_id, chat.event_id];
+    return [chat.initiator, chat.receiver];
   });
   return db.query(
     format(
       `INSERT INTO chat_rooms (
-      user1_id, user2_id, event_id) VALUES %L RETURNING *`,
+      initiator, receiver) VALUES %L RETURNING *`,
       chat_rooms
     )
   );
