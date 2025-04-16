@@ -32,11 +32,16 @@ const getEventsById = (request, reply) => {
 };
 
 const postEvents = (request, reply) => {
+  // console.log(request.body);
+  const { user_id, topic, description, location, category } = request.body;
   console.log(request.body);
   const { user_id, title, description, location, category, event_date } =
     request.body;
 
   if (user_id && location) {
+    // console.log("posting event:", topic);
+    addEvent({ user_id, topic, description, location, category }).then(
+      (event) => {
     console.log("posting event:", title);
     addEvent({ user_id, title, description, location, category, event_date })
       .then((event) => {

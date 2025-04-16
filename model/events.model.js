@@ -53,6 +53,9 @@ const fetchEvents = ({
   if (sort_by && order) {
     orderByQuery = `ORDER BY events.${sort_by} ${order}`;
   }
+  // console.log("events:");
+  selectQuery += whereQyery + groupByQuery + orderByQuery;
+  // console.log("events:", selectQuery);
 
   //selectQuery += whereQyery + groupByQuery + orderByQuery;
 
