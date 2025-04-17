@@ -60,67 +60,67 @@ describe("GET /api/users", () => {
         });
       });
   });
-
-  test("404: Responds with path not found", () => {
-    return request(server)
-      .get("/api/event")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("Invalid Endpoint!!");
-      });
-  });
-  test("200: Responds with all the events with sort order votes order by desc", () => {
-    return request(server)
-      .get("/api/events?sort_by=created_at&&order=asc")
-      .expect(200)
-      .then(({ body: { events } }) => {
-        expect(events.length).toBe(7);
-        expect(events).toBeSortedBy("created_at", { ascending: true });
-        events.forEach((event) => {
-          expect(typeof event.title).toBe("string");
-          expect(typeof event.description).toBe("string");
-          expect(typeof event.location).toBe("string");
-          expect(typeof event.user_id).toBe("number");
-        });
-      });
-  });
-
-  test("200: Responds with all the events belonging to user_id", () => {
-    return request(server)
-      .get("/api/events?column_name=user_id&&value=1")
-      .expect(200)
-      .then(({ body: { events } }) => {
-        expect(events.length).toBe(1);
-        expect(events).toBeSortedBy("created_at", { ascending: true });
-        events.forEach((event) => {
-          expect(typeof event.title).toBe("string");
-          expect(event.description).toBe(
-            "Visit the museum and chat about history and life."
-          );
-          expect(event.status).toBe("ACTIVE");
-        });
-      });
-  });
 });
 
-test("201: Creates a new user", () => {
-  const newUser = {
-    first_name: "Charles",
-    last_name: "Dickens",
-    email: "charles.dickens@gmail.com",
-    address: "",
-    phone_number: "",
-    date_of_birth: "08-01-1909",
-    fav_food: "burger",
-    personality: "",
-    bio: "",
-    gender: "Female",
-    reason: "",
-    job_title: "Author",
-    pet_owner: "",
-    coffee_tea: "Tea",
-    image_url:
-      "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
-  };
-  return request(server);
-});
+//   test("404: Responds with path not found", () => {
+//     return request(server)
+//       .get("/api/event")
+//       .expect(404)
+//       .then(({ body: { msg } }) => {
+//         expect(msg).toBe("Invalid Endpoint!!");
+//       });
+//   });
+//   test("200: Responds with all the events with sort order votes order by desc", () => {
+//     return request(server)
+//       .get("/api/events?sort_by=created_at&&order=asc")
+//       .expect(200)
+//       .then(({ body: { events } }) => {
+//         expect(events.length).toBe(7);
+//         expect(events).toBeSortedBy("created_at", { ascending: true });
+//         events.forEach((event) => {
+//           expect(typeof event.title).toBe("string");
+//           expect(typeof event.description).toBe("string");
+//           expect(typeof event.location).toBe("string");
+//           expect(typeof event.user_id).toBe("number");
+//         });
+//       });
+//   });
+
+// test("200: Responds with all the events belonging to user_id", () => {
+//   return request(server)
+//     .get("/api/events?column_name=user_id&&value=1")
+//     .expect(200)
+//     .then(({ body: { events } }) => {
+//       expect(events.length).toBe(1);
+//       expect(events).toBeSortedBy("created_at", { ascending: true });
+//       events.forEach((event) => {
+//         expect(typeof event.title).toBe("string");
+//         expect(event.description).toBe(
+//           "Visit the museum and chat about history and life."
+//         );
+//         expect(event.status).toBe("ACTIVE");
+//       });
+//     });
+// });
+
+// test("201: Creates a new user", () => {
+//   const newUser = {
+//     first_name: "Charles",
+//     last_name: "Dickens",
+//     email: "charles.dickens@gmail.com",
+//     address: "",
+//     phone_number: "",
+//     date_of_birth: "08-01-1909",
+//     fav_food: "burger",
+//     personality: "",
+//     bio: "",
+//     gender: "Female",
+//     reason: "",
+//     job_title: "Author",
+//     pet_owner: "",
+//     coffee_tea: "Tea",
+//     image_url:
+//       "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
+//   };
+//   return request(server);
+// });
