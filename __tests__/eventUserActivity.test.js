@@ -65,6 +65,7 @@ describe("event-user-activity", () => {
       .expect(201)
       .then(({ body }) => {
         const event = body.event_user_activity;
+
         expect(event.id).toBe(6);
         expect(event.host_id).toBe(1);
         expect(event.attendee_id).toBe(4);
