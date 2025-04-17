@@ -21,5 +21,44 @@
         }
       ]
     }
+  },
+  "POST /api/event-user-activity": {
+    "description": "creates a new event-user-activity record",
+    "exampleRequest": {
+      "event_id": 1,
+      "host_id": 1,
+      "attendee_id": 4,
+      "user_status": "REQUESTED",
+      "user_approved": false
+    },
+    "exampleResponse": {
+      "event_user_activity": {
+        "id": 6,
+        "event_id": 1,
+        "host_id": 1,
+        "attendee_id": 4,
+        "user_status": "REQUESTED",
+        "user_approved": false
+      }
+    }
+  },
+  "PATCH /api/event-user-activity/:event_id/:attendee_id": {
+    "description": "updates the user_status and user_approaved to 'APPROVED' and true for a specific attendee of an event",
+    "exampleRequest": {
+      "user_status": "APPROVED",
+      "user_approved": true
+    },
+    "exampleResponse": {
+      "event_user_activity": [
+        {
+          "id": 1,
+          "event_id": 1,
+          "host_id": 1,
+          "attendee_id": 2,
+          "user_status": "APPROVED",
+          "user_approved": true
+        }
+      ]
+    }
   }
 }
