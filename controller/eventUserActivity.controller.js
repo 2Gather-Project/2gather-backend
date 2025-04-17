@@ -11,7 +11,7 @@ function getEventUserActivity(request, reply) {
       reply.send({ event_user_activity: rows });
     })
     .catch((err) => {
-      reply.code(err.status).send({ message: err.message });
+      reply.code(404).send({ message: err.message });
     });
 }
 
@@ -30,7 +30,7 @@ function postEventUserActivity(request, reply) {
       reply.code(201).send({ event_user_activity: rows[0] });
     })
     .catch((err) => {
-      reply.code(err.status).send({ message: err.message });
+      reply.code(404).send({ message: err.message });
     });
 }
 
@@ -48,7 +48,7 @@ function updateEventUserActivity(request, reply) {
     })
     .catch((err) => {
       console.log(err);
-      reply.code(err.status).send({ message: err.message });
+      reply.code(404).send({ message: err.message });
     });
 }
 

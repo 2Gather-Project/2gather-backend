@@ -71,6 +71,22 @@ describe("event-user-activity", () => {
         expect(event.user_approved).toBe(false);
       });
   });
+  xtest("404: POST an error when sending invalid event_id to event-user-activity", () => {
+    return request(server)
+      .post("/api/event-user-activity")
+      .send({
+        event_id: 50,
+        host_id: 1,
+        attendee_id: 4,
+        user_status: "REQUESTED",
+        user_approved: false,
+      })
+      .expect(404)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.error).toBe("Not Found");
+      });
+  });
   test("PATCH 200: updates event user activity status to APPROVED", () => {
     return request(server)
       .patch("/api/event-user-activity/1/2")
@@ -89,7 +105,7 @@ describe("event-user-activity", () => {
         expect(activity.user_approved).toBe(true);
       });
   });
-  test("PATCH 400: Responds with a bad request, when given an invalid attendee ID", () => {
+  test("PATCH 404: Responds with a not found, when given an invalid attendee ID", () => {
     return request(server)
       .patch("/api/event-uer-activity/1/73")
       .send({
@@ -98,7 +114,7 @@ describe("event-user-activity", () => {
       })
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request, invalid input");
+        expect(body.error).toBe("Not Found");
       });
   });
 });

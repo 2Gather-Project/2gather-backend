@@ -20,9 +20,14 @@ const {
   getUserByID,
   createUser,
   patchUser,
-  login
+  login,
 } = require("./controller/users.controller.js");
 const cors = require("@fastify/cors");
+const {
+  handleCustomError,
+  handleSqlError,
+  handleServerError,
+} = require("./controller/errors.controller.js");
 
 const fastifyApp = fastify({
   logger: true,
@@ -58,6 +63,11 @@ fastifyApp.post("/api/users", createUser);
 fastifyApp.patch("/api/users/:user_id", patchUser);
 
 fastifyApp.post("/api/login", login);
-// fastifyApp.all("/*", handleNonExistentEndpoint);
+
+// fastifyApp.all("/*", handleNonExistentEndpoint)
+
+// fastifyApp.setErrorHandler(handleCustomError);
+// fastifyApp.setErrorHandler(handleSqlError);
+// fastifyApp.setErrorHandler(handleServerError);
 
 module.exports = fastifyApp;
