@@ -130,10 +130,27 @@ RETURNING *;`;
   }
 };
 
+const fetchUserbyEmail = (email) => {
+
+  return db
+    .query(`SELECT * FROM users WHERE email = $1`, [email])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          message: "404: User not found",
+        });
+      }
+      return rows[0];
+    });
+
+}
+
 module.exports = {
   usersExists,
   getUsers,
   fetchUserByID,
   postUsers,
   updateUser,
+  fetchUserbyEmail
 };
