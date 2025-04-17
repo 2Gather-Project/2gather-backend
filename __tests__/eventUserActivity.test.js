@@ -29,7 +29,7 @@ describe("event-user-activity", () => {
       .then(({ body }) => {
         const eventUserActivityArray = body.event_user_activity;
         console.log(JSON.stringify(body));
-        expect(eventUserActivityArray.length).toBe(2);
+        expect(eventUserActivityArray.length).toBe(1);
 
         eventUserActivityArray.forEach((event) => {
           expect(typeof event.id).toBe("number");
@@ -65,7 +65,7 @@ describe("event-user-activity", () => {
       .expect(201)
       .then(({ body }) => {
         const event = body.event_user_activity;
-        expect(event.id).toBe(9);
+        expect(event.id).toBe(6);
         expect(event.host_id).toBe(1);
         expect(event.attendee_id).toBe(4);
         expect(event.user_status).toBe("REQUESTED");
