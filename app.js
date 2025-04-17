@@ -3,7 +3,6 @@ const {
   handleNonExistentEndpoint,
 } = require("./controller/endpoints.controller.js");
 const fastify = require("fastify");
-const { allUsers } = require("./controller/users.controller.js");
 const {
   getEvents,
   postEvents,
