@@ -28,10 +28,14 @@ const fastifyApp = fastify({
   logger: true,
 });
 
-// fastifyApp.use(cors());
-fastifyApp.register(cors, {
-  origin: true,
-  preflight: true,
+fastifyApp.register(cors, { origin: "*", credentials: true });
+
+fastifyApp.get("/cors-enabled", (_req, reply) => {
+  reply.send("CORS headers");
+});
+
+fastifyApp.get("/cors-disabled", { cors: false }, (_req, reply) => {
+  reply.send("No CORS headers");
 });
 
 fastifyApp.get("/api", getEndpoints);
@@ -54,6 +58,6 @@ fastifyApp.post("/api/users", createUser);
 fastifyApp.patch("/api/users/:user_id", patchUser);
 
 fastifyApp.post("/api/login", login);
-fastifyApp.all("/*", handleNonExistentEndpoint);
+// fastifyApp.all("/*", handleNonExistentEndpoint);
 
 module.exports = fastifyApp;
