@@ -20,6 +20,7 @@ const {
   getUserByID,
   createUser,
   patchUser,
+  login
 } = require("./controller/users.controller.js");
 const cors = require("@fastify/cors");
 
@@ -39,6 +40,7 @@ fastifyApp.get("/api/events/:event_id", getEventsById);
 fastifyApp.delete("/api/events/:event_id", deleteEvent);
 fastifyApp.get("/api/event-user-activity/:event_id", getEventUserActivity);
 fastifyApp.post("/api/event-user-activity", postEventUserActivity);
+
 fastifyApp.patch(
   "/api/event-user-activity/:event_id/:attendee_id",
   updateEventUserActivity
@@ -47,6 +49,7 @@ fastifyApp.get("/api/users/:user_id", getUserByID);
 fastifyApp.post("/api/users", createUser);
 fastifyApp.patch("/api/users/:user_id", patchUser);
 
+fastifyApp.post("/api/login", login);
 fastifyApp.all("/*", handleNonExistentEndpoint);
 
 module.exports = fastifyApp;
