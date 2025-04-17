@@ -131,7 +131,7 @@ const fetchEventById = (event_id) => {
   });
 };
 
-const addEvent = ({ user_id, topic, description, location, category }) => {
+const dropEventById = ({ user_id, topic, description, location, category }) => {
   return db
     .query(`DELETE FROM events where event_id = $1 returning *;`, [event_id])
     .then(({ rows }) => {
