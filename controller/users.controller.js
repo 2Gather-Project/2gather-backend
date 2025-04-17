@@ -3,6 +3,7 @@ const {
   fetchUserByID,
   postUsers,
   updateUser,
+  fetchUserbyEmail
 } = require("../model/users.model");
 
 const allUsers = (request, reply, next) => {
@@ -83,4 +84,24 @@ const patchUser = (request, reply, next) => {
   });
 };
 
-module.exports = { allUsers, getUserByID, createUser, patchUser };
+
+const login = (request, reply) => {
+  const { email } = request.body;
+
+  if (!email) {
+    return reply.code(400).send({ message: "400: Username is required" });
+  }
+
+  fetchUserbyEmail(email)
+    .then((user) => {
+      reply.send({ user });
+    })
+    .catch((err) => {
+      reply.code(err.status).send({ message: err.message });
+    });
+};
+
+
+
+
+module.exports = { allUsers, getUserByID, createUser, patchUser, login };

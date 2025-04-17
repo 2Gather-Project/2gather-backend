@@ -206,4 +206,38 @@ test("400: Responds with error if user id is not a number", () => {
     .then(({ body: { msg } }) => {
       expect(msg).toBe("Invalid user_id");
     });
+})
+
+test("200: returns user when valid email is provided", () => {
+
+  return request(server)
+    .post("/api/login")
+    .send({ email: "charles.dickens@gmail.com" })
+    .expect(200)
+    .then(({ body }) => {
+      const { user } = body;
+      expect(user.user_id).toBe(1);
+      expect(user.first_name).toBe("Charles");
+      expect(user.last_name).toBe("Dickens");
+      expect(user.email).toBe("charles.dickens@gmail.com");
+    });
+})
+test("404: returns error when username is not found", () => {
+  return request(server)
+    .post("/api/login")
+    .send({ email: "random@example.com" })
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.message).toBe("404: User not found");
+    });
+
+});
+test("400: returns error when username is not provided", () => {
+  return request(server)
+    .post("/api/login")
+    .send({})
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.message).toBe("400: Username is required");
+    });
 });
