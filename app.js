@@ -27,7 +27,11 @@ const fastifyApp = fastify({
   logger: true,
 });
 
-fastifyApp.use(cors());
+// fastifyApp.use(cors());
+fastifyApp.register(cors, {
+  origin: true,
+  preflight: true,
+});
 
 fastifyApp.get("/api", getEndpoints);
 fastifyApp.get("/api/users", allUsers);
