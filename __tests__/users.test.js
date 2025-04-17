@@ -45,7 +45,6 @@ test("200: Responds with a single user", () => {
     .get("/api/users/1")
     .expect(200)
     .then(({ body }) => {
-      console.log(body);
       const user = body.user;
       expect(user).toHaveProperty("user_id");
       expect(typeof user.user_id).toBe("number");

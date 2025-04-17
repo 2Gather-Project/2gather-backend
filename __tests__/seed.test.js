@@ -35,7 +35,6 @@ describe("seed", () => {
         AND column_name= 'first_name'`,
         )
         .then(({ rows: [column] }) => {
-          console.log(column);
           expect(column.column_name).toBe("first_name");
           expect(column.data_type).toBe("character varying");
         });
@@ -49,7 +48,6 @@ describe("seed", () => {
         AND column_name= 'last_name'`,
         )
         .then(({ rows: [column] }) => {
-          console.log(column);
           expect(column.column_name).toBe("last_name");
           expect(column.data_type).toBe("character varying");
         });
@@ -63,7 +61,6 @@ describe("seed", () => {
         AND column_name= 'email'`,
         )
         .then(({ rows: [column] }) => {
-          console.log(column);
           expect(column.column_name).toBe("email");
           expect(column.data_type).toBe("character varying");
         });
@@ -77,7 +74,6 @@ describe("seed", () => {
         AND column_name= 'address'`,
         )
         .then(({ rows: [column] }) => {
-          console.log(column);
           expect(column.column_name).toBe("address");
           expect(column.data_type).toBe("character varying");
         });
@@ -137,7 +133,6 @@ describe("seed", () => {
         AND column_name= 'user_id'`,
         )
         .then(({ rows: [column] }) => {
-          console.log(column);
           expect(column.column_name).toBe("user_id");
           expect(column.data_type).toBe("integer");
         });
@@ -151,7 +146,6 @@ describe("seed", () => {
         AND column_name= 'title'`,
         )
         .then(({ rows: [column] }) => {
-          console.log(column);
           expect(column.column_name).toBe("title");
           expect(column.data_type).toBe("character varying");
         });

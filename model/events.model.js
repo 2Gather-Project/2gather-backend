@@ -35,8 +35,6 @@ const fetchEvents = ({
 
   let selectQuery = `SELECT * FROM events `;
 
-  //const groupByQuery = `GROUP BY events.user_id `;
-
   let whereQyery = "";
   let orderByQuery = "";
 
@@ -53,12 +51,6 @@ const fetchEvents = ({
   if (sort_by && order) {
     orderByQuery = `ORDER BY events.${sort_by} ${order}`;
   }
-  // console.log("events:");
-  // console.log("events:");
-  // selectQuery += whereQyery + groupByQuery + orderByQuery;
-  // console.log("events:", selectQuery);
-
-  //selectQuery += whereQyery + groupByQuery + orderByQuery;
 
   selectQuery += whereQyery + orderByQuery;
 
@@ -79,7 +71,6 @@ const addEvent = ({
   category,
   event_date,
 }) => {
-  console.log(category);
   return db
     .query(
       `INSERT INTO events
@@ -135,7 +126,6 @@ const dropEventById = ({ user_id, topic, description, location, category }) => {
   return db
     .query(`DELETE FROM events where event_id = $1 returning *;`, [event_id])
     .then(({ rows }) => {
-      console.log("delete:", rows);
       return rows;
     });
 };

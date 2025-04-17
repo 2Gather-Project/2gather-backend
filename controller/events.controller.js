@@ -11,7 +11,6 @@ const getEvents = (request, reply) => {
 
   fetchEvents({ sort_by, order, column_name, value })
     .then((rows) => {
-      console.log("event:", rows);
       reply.send({ events: rows });
     })
     .catch((error) => {
@@ -32,17 +31,14 @@ const getEventsById = (request, reply) => {
 };
 
 const postEvents = (request, reply) => {
-  // console.log(request.body);
   const { user_id, topic, description, location, category } = request.body;
 
   if (user_id && location) {
-    console.log("posting event:", topic);
     addEvent({ user_id, topic, description, location, category })
       .then((event) => {
         reply.send({ event: event[0] });
       })
       .catch((error) => {
-        console.log(error);
         reply.send(error);
       });
   } else {
@@ -56,11 +52,9 @@ const patchEvents = (request, reply) => {
 
   updateEvent({ title, description, location, category, event_date, event_id })
     .then((event) => {
-      console.log("event:", event);
       reply.send({ event: event[0] });
     })
     .catch((error) => {
-      console.log(error);
       reply.send(error);
     });
 };

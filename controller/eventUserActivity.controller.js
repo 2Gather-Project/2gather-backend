@@ -11,9 +11,6 @@ function getEventUserActivity(request, reply) {
       reply.send({ event_user_activity: rows });
     })
     .catch((err) => {
-      // if (err.code === "22P02") {
-      //   reply.code(400).send({ message: "400: Bad request" });
-      // }
       reply.code(err.status).send({ message: err.message });
     });
 }

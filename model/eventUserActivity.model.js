@@ -15,12 +15,6 @@ function fetchEventUserActivity(event_id) {
           message: "404: id was not found",
         });
       }
-      // if (rows.code === "22P02") {
-      //   return Promise.reject({
-      //     status: 400,
-      //     message: "400: Bad request",
-      //   });
-      // }
       return rows;
     });
 }

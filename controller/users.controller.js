@@ -65,7 +65,6 @@ const createUser = async (request, reply) => {
     );
     reply.status(201).send({ user });
   } catch (err) {
-    console.error("Error creating user:", err);
     reply.status(500).send({ msg: "Internal server error" });
   }
 };

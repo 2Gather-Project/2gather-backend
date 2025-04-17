@@ -28,7 +28,6 @@ describe("event-user-activity", () => {
       .expect(200)
       .then(({ body }) => {
         const eventUserActivityArray = body.event_user_activity;
-        console.log(JSON.stringify(body));
         expect(eventUserActivityArray.length).toBe(1);
 
         eventUserActivityArray.forEach((event) => {
@@ -47,7 +46,6 @@ describe("event-user-activity", () => {
       .get("/api/event-user-activity/9999999")
       .expect(404)
       .then(({ body }) => {
-        console.log(body);
         expect(body.message).toBe("404: id was not found");
       });
   });
@@ -91,13 +89,5 @@ describe("event-user-activity", () => {
         expect(activity.user_approved).toBe(true);
       });
   });
-  // test.only("400: get an error message if id isn't found in database", () => {
-  //   return request(server)
-  //     .get("/api/event-user-activity/one")
-  //     .expect(400)
-  //     .then(({ body }) => {
-  //       console.log(body);
-  //       expect(body.message).toBe("400: Bad request");
-  //     });
-  // });
+
 });
