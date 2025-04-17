@@ -24,7 +24,7 @@ function postEventUserActivity(request, reply) {
     host_id,
     attendee_id,
     user_status,
-    user_approved,
+    user_approved
   )
     .then((rows) => {
       reply.code(201).send({ event_user_activity: rows[0] });
@@ -41,12 +41,13 @@ function updateEventUserActivity(request, reply) {
     event_id,
     attendee_id,
     user_status,
-    user_approved,
+    user_approved
   )
     .then((updatedActivity) => {
       reply.send({ event_user_activity: updatedActivity });
     })
     .catch((err) => {
+      console.log(err);
       reply.code(err.status).send({ message: err.message });
     });
 }

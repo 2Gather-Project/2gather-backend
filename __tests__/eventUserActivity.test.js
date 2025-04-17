@@ -41,7 +41,7 @@ describe("event-user-activity", () => {
         });
       });
   });
-  test("404: GET an error message if id isn't found in database", () => {
+  test("404: GET an error message if event id isn't found in database", () => {
     return request(server)
       .get("/api/event-user-activity/9999999")
       .expect(404)
@@ -89,5 +89,16 @@ describe("event-user-activity", () => {
         expect(activity.user_approved).toBe(true);
       });
   });
-
+  test("PATCH 400: Responds with a bad request, when given an invalid attendee ID", () => {
+    return request(server)
+      .patch("/api/event-uer-activity/1/73")
+      .send({
+        user_status: "APPROVED",
+        user_approved: true,
+      })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request, invalid input");
+      });
+  });
 });

@@ -5,6 +5,7 @@ const getEndpoints = (request, reply) => {
 };
 
 const handleNonExistentEndpoint = (request, reply) => {
+  console.log(request);
   reply.status(404).send({ msg: `Invalid Endpoint!!` });
 };
 module.exports = { getEndpoints, handleNonExistentEndpoint };

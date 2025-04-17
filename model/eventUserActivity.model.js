@@ -6,7 +6,7 @@ function fetchEventUserActivity(event_id) {
     .query(
       `
     SELECT * from event_user_activity WHERE event_user_activity.event_id=$1`,
-      [event_id],
+      [event_id]
     )
     .then(({ rows }) => {
       if (rows.length === 0) {
@@ -24,12 +24,12 @@ function createEventUserActivity(
   host_id,
   attendee_id,
   user_status,
-  user_approved,
+  user_approved
 ) {
   return db
     .query(
       `INSERT INTO event_user_activity (event_id, host_id, attendee_id, user_status, user_approved) VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
-      [event_id, host_id, attendee_id, user_status, user_approved],
+      [event_id, host_id, attendee_id, user_status, user_approved]
     )
     .then(({ rows }) => {
       return rows;
@@ -39,8 +39,9 @@ function updateEventUserActivityStatus(
   event_id,
   attendee_id,
   user_status,
-  user_approved,
+  user_approved
 ) {
+  console.log(attendee_id);
   return db
     .query(
       `
@@ -49,7 +50,7 @@ function updateEventUserActivityStatus(
       WHERE event_id = $3 AND attendee_id = $4
       RETURNING *;
       `,
-      [user_status, user_approved, event_id, attendee_id],
+      [user_status, user_approved, event_id, attendee_id]
     )
     .then(({ rows }) => {
       if (rows.length === 0) {

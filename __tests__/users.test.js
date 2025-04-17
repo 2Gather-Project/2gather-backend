@@ -3,7 +3,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const endpointsJson = require("../endpoints.json");
-const fastifyApp = require("../userApp");
+const fastifyApp = require("../app");
 const users = require("../db/data/test-data/users");
 
 let server;
