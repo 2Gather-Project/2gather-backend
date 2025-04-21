@@ -33,7 +33,13 @@ const fastifyApp = fastify({
   logger: true,
 });
 
-fastifyApp.register(cors, { origin: "*", credentials: true });
+fastifyApp.register(cors, {
+  origin: (origin, cb) => {
+    // allow any origin by always returning true
+    cb(null, true);
+  },
+  credentials: true
+});
 
 fastifyApp.get("/cors-enabled", (_req, reply) => {
   reply.send("CORS headers");
