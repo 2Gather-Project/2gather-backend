@@ -146,11 +146,22 @@ const fetchUserbyEmail = (email) => {
 
 }
 
+const fetchHostedEvents = (user_id) => {
+
+  return db
+    .query(`SELECT * FROM events WHERE user_id = $1`, [user_id])
+    .then(({ rows }) => {
+      return rows
+
+    })
+}
+
 module.exports = {
   usersExists,
   getUsers,
   fetchUserByID,
   postUsers,
   updateUser,
-  fetchUserbyEmail
+  fetchUserbyEmail,
+  fetchHostedEvents
 };

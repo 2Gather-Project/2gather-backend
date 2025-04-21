@@ -241,3 +241,24 @@ test("400: returns error when username is not provided", () => {
       expect(body.message).toBe("400: Username is required");
     });
 });
+
+
+test("GET 200: responds with the events hosted by a particular user", () => {
+  return request(server)
+    .get("/api/users/1/hosted-events")
+    .expect(200)
+    .then(({ body }) => {
+
+      const hosted_events = body.events
+      hosted_events.forEach((event) => {
+        expect(typeof event.title).toBe("string");
+        expect(typeof event.description).toBe("string");
+        expect(typeof event.location).toBe("string");
+        expect(typeof event.event_date).toBe("string");
+        expect(typeof event.status).toBe("string");
+        expect(typeof event.created_at).toBe("string");
+      });
+
+    });
+
+})

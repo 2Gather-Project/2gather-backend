@@ -3,7 +3,8 @@ const {
   fetchUserByID,
   postUsers,
   updateUser,
-  fetchUserbyEmail
+  fetchUserbyEmail,
+  fetchHostedEvents
 } = require("../model/users.model");
 
 const allUsers = (request, reply, next) => {
@@ -101,7 +102,15 @@ const login = (request, reply) => {
     });
 };
 
+const getHostedEvents = (request, reply) => {
+  const { user_id } = request.params;
+  fetchHostedEvents(user_id).then((events) => {
+    reply.send({ events });
+  });
+
+
+}
 
 
 
-module.exports = { allUsers, getUserByID, createUser, patchUser, login };
+module.exports = { allUsers, getUserByID, createUser, patchUser, login, getHostedEvents };

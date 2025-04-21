@@ -20,6 +20,7 @@ const {
   getUserByID,
   createUser,
   patchUser,
+  getHostedEvents,
   login,
 } = require("./controller/users.controller.js");
 const cors = require("@fastify/cors");
@@ -68,7 +69,11 @@ fastifyApp.get("/api/users/:user_id", getUserByID);
 fastifyApp.post("/api/users", createUser);
 fastifyApp.patch("/api/users/:user_id", patchUser);
 
+fastifyApp.get("/api/users/:user_id/hosted-events", getHostedEvents);
+
 fastifyApp.post("/api/login", login);
+
+
 
 // fastifyApp.all("/*", handleNonExistentEndpoint)
 
