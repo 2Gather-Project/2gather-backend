@@ -7,9 +7,9 @@ const {
 } = require("../model/events.model");
 
 const getEvents = (request, reply) => {
-  const { sort_by, order, column_name, value } = request.query;
+  const { sort_by, order, column_name, value, not_equal } = request.query;
 
-  fetchEvents({ sort_by, order, column_name, value })
+  fetchEvents({ sort_by, order, column_name, value, not_equal })
     .then((rows) => {
       reply.send({ events: rows });
     })
@@ -31,14 +31,16 @@ const getEventsById = (request, reply) => {
 };
 
 const postEvents = (request, reply) => {
-  const { user_id, topic, description, location, category } = request.body;
+  const { user_id, title, description, location, category, event_date } =
+    request.body;
 
-  if (user_id && location) {
-    addEvent({ user_id, topic, description, location, category })
+  if (user_id) {
+    addEvent({ user_id, title, description, location, category, event_date })
       .then((event) => {
         reply.send({ event: event[0] });
       })
       .catch((error) => {
+        console.log(error);
         reply.send(error);
       });
   } else {

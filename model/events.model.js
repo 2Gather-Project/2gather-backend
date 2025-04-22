@@ -20,6 +20,7 @@ const fetchEvents = ({
   order = "asc",
   column_name = undefined,
   value = undefined,
+  not_equal = false
 }) => {
   if (sort_by && !possible_column_names.includes(sort_by)) {
     return Promise.reject({ status: 404, msg: "Invalid Input" });
@@ -38,10 +39,14 @@ const fetchEvents = ({
   let whereQyery = "";
   let orderByQuery = "";
 
-  if (column_name && value && Number(value)) {
+  console.log(not_equal);
+
+  if (column_name && value && Number(value) && !not_equal) {
     whereQyery = `WHERE ${column_name} = '${value}' `;
-  } else if (column_name && value && typeof value === "string") {
+  } else if (column_name && value && typeof value === "string" && !not_equal) {
     whereQyery = `WHERE ${column_name} ILIKE '%${value}%' `;
+  } else if (column_name && value && Number(value) && not_equal) {
+    whereQyery = `WHERE ${column_name} != '${value}' `;
   }
 
   if (value && (column_name === "status" || column_name === "category")) {
