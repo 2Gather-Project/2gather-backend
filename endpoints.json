@@ -266,5 +266,13 @@
         }
       ]
     }
+  },
+  "GET /api/interests": {
+    "description": "Get the values of enums",
+    "exampleResponse": [
+      {
+        "enum_range": "{COOKING,DANCING,\"DOG WALKING\",THEATER,READING,OTHER}"
+      }
+    ]
   }
 }

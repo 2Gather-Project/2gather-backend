@@ -1,10 +1,21 @@
 const {
+  fetchInterests,
   fetchEvents,
   addEvent,
   updateEvent,
   fetchEventById,
   dropEventById,
 } = require("../model/events.model");
+
+const getInterests = (request, reply) => {
+  fetchInterests()
+    .then((rows) => {
+      reply.send({ interests: rows });
+    })
+    .catch((error) => {
+      reply.send(error);
+    });
+};
 
 const getEvents = (request, reply) => {
   const { sort_by, order, column_name, value, not_equal } = request.query;
@@ -31,6 +42,7 @@ const getEventsById = (request, reply) => {
 };
 
 const postEvents = (request, reply) => {
+  console.log(request.body);
   const { user_id, title, description, location, category, event_date } =
     request.body;
 
@@ -83,4 +95,5 @@ module.exports = {
   postEvents,
   patchEvents,
   deleteEvent,
+  getInterests,
 };

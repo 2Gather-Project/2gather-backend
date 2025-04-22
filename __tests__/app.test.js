@@ -178,3 +178,17 @@ describe("POST /api/events", () => {
       });
   });
 });
+
+describe("POST /api/interests", () => {
+  test("200: all the interests", () => {
+    return request(server)
+      .get("/api/interests")
+      .expect(200)
+      .then(({ body }) => {
+        const interests = body.interests;
+        console.log(interests);
+        expect(Array.isArray(interests)).toBe(true);
+        expect(interests.length).toBe(1);
+      });
+  });
+});

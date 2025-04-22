@@ -9,6 +9,7 @@ const {
   patchEvents,
   getEventsById,
   deleteEvent,
+  getInterests,
 } = require("./controller/events.controller.js");
 const {
   getEventUserActivity,
@@ -39,8 +40,8 @@ fastifyApp.register(cors, {
     // allow any origin by always returning true
     cb(null, true);
   },
-  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-  credentials: true
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  credentials: true,
 });
 
 fastifyApp.get("/cors-enabled", (_req, reply) => {
@@ -72,9 +73,9 @@ fastifyApp.patch("/api/users/:user_id", patchUser);
 
 fastifyApp.get("/api/users/:user_id/hosted-events", getHostedEvents);
 
+fastifyApp.get("/api/interests", getInterests);
+
 fastifyApp.post("/api/login", login);
-
-
 
 // fastifyApp.all("/*", handleNonExistentEndpoint)
 
