@@ -39,6 +39,7 @@ fastifyApp.register(cors, {
     // allow any origin by always returning true
     cb(null, true);
   },
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   credentials: true
 });
 
