@@ -4,7 +4,7 @@ const {
   postUsers,
   updateUser,
   fetchUserbyEmail,
-  fetchHostedEvents
+  fetchHostedEvents,
 } = require("../model/users.model");
 
 const allUsers = (request, reply, next) => {
@@ -27,44 +27,14 @@ const getUserByID = (request, reply, next) => {
 };
 
 const createUser = async (request, reply) => {
-  const {
-    first_name,
-    last_name,
-    email,
-    address,
-    phone_number,
-    date_of_birth,
-    fav_food,
-    personality,
-    bio,
-    gender,
-    reason,
-    job_title,
-    coffee_tea,
-    image_url,
-  } = request.body;
+  const { first_name, last_name, email, address } = request.body;
 
   if (!first_name || !last_name || !email || !address) {
     return reply.status(400).send({ msg: "Field is required" });
   }
 
   try {
-    const user = await postUsers(
-      first_name,
-      last_name,
-      email,
-      address,
-      phone_number,
-      date_of_birth,
-      fav_food,
-      personality,
-      bio,
-      gender,
-      reason,
-      job_title,
-      coffee_tea,
-      image_url
-    );
+    const user = await postUsers(first_name, last_name, email, address);
     reply.status(201).send({ user });
   } catch (err) {
     reply.status(500).send({ msg: "Internal server error" });
@@ -84,7 +54,6 @@ const patchUser = (request, reply, next) => {
     reply.status(200).send({ user: updatedUser });
   });
 };
-
 
 const login = (request, reply) => {
   const { email } = request.body;
@@ -107,10 +76,13 @@ const getHostedEvents = (request, reply) => {
   fetchHostedEvents(user_id).then((events) => {
     reply.send({ events });
   });
+};
 
-
-}
-
-
-
-module.exports = { allUsers, getUserByID, createUser, patchUser, login, getHostedEvents };
+module.exports = {
+  allUsers,
+  getUserByID,
+  createUser,
+  patchUser,
+  login,
+  getHostedEvents,
+};
