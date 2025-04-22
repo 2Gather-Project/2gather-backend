@@ -27,16 +27,23 @@ const getUserByID = (request, reply, next) => {
 };
 
 const createUser = async (request, reply) => {
-  const { first_name, last_name, email, address } = request.body;
+  const { first_name, last_name, email, address, date_of_birth } = request.body;
 
-  if (!first_name || !last_name || !email || !address) {
-    return reply.status(400).send({ msg: "Field is required" });
+  if (!first_name || !last_name || !email || !address || !date_of_birth) {
+    return reply.status(400).send({ msg: "All fields are required" });
   }
 
   try {
-    const user = await postUsers(first_name, last_name, email, address);
+    const user = await postUsers(
+      first_name,
+      last_name,
+      email,
+      address,
+      date_of_birth,
+    );
     reply.status(201).send({ user });
   } catch (err) {
+    console.error("Backend error:", err);
     reply.status(500).send({ msg: "Internal server error" });
   }
 };

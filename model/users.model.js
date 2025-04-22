@@ -25,15 +25,21 @@ const fetchUserByID = (user_id) => {
     });
 };
 
-const postUsers = async (first_name, last_name, email, address) => {
+const postUsers = async (
+  first_name,
+  last_name,
+  email,
+  address,
+  date_of_birth,
+) => {
   const query = `
     INSERT INTO users (
-      first_name, last_name, email, address
+      first_name, last_name, email, address, date_of_birth
     )
-    VALUES ($1, $2, $3, $4)
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *;
   `;
-  const values = [first_name, last_name, email, address];
+  const values = [first_name, last_name, email, address, date_of_birth];
 
   try {
     const result = await db.query(query, values);
@@ -49,7 +55,6 @@ const postUsers = async (first_name, last_name, email, address) => {
 const updateUser = async (body) => {
   const {
     address,
-    phone_number,
     fav_food,
     personality,
     bio,
@@ -64,21 +69,19 @@ const updateUser = async (body) => {
   const query = `UPDATE users
 SET
   address = $1,
-  phone_number = $2,
-  fav_food = $3,
-  personality = $4,
-  bio = $5,
-  gender = $6,
-  reason = $7,
-  job_title = $8,
-  coffee_tea = $9,
-  image_url = $10
-WHERE user_id = $11
+  fav_food = $2,
+  personality = $3,
+  bio = $4,
+  gender = $5,
+  reason = $6,
+  job_title = $7,
+  coffee_tea = $8,
+  image_url = $9
+WHERE user_id = $10
 RETURNING *;`;
 
   const values = [
     address,
-    phone_number,
     fav_food,
     personality,
     bio,
