@@ -5,7 +5,10 @@ const {
   updateEvent,
   fetchEventById,
   dropEventById,
+  fetchApprovedEvents
 } = require("../model/events.model");
+const { usersExists } = require('../model/users.model')
+
 
 const getInterests = (request, reply) => {
   fetchInterests()
@@ -89,6 +92,30 @@ const deleteEvent = (request, reply) => {
     });
 };
 
+
+const getApprovedEvents = (request, reply) => {
+  const user_id = Number(request.params.user_id);
+
+  if (isNaN(user_id)) {
+    return reply.status(400).send({ msg: "Invalid user" });
+  }
+  usersExists(user_id)
+    .then((response) => {
+      if (!response) return Promise.reject({ status: 404, msg: 'User not found' })
+      return fetchApprovedEvents(user_id);
+    })
+    .then((rows) => {
+      reply.send({ events: rows });
+    })
+    .catch((error) => {
+      if (error.status) {
+        reply.status(error.status).send({ msg: error.msg });
+      } else {
+        console.log(error);
+        reply.status(500).send({ msg: "Something went wrong!" });
+      }
+    });
+};
 module.exports = {
   getEvents,
   getEventsById,
@@ -96,4 +123,5 @@ module.exports = {
   patchEvents,
   deleteEvent,
   getInterests,
+  getApprovedEvents
 };
