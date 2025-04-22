@@ -33,32 +33,76 @@ describe("GET /api", () => {
   });
 });
 
-describe("GET /api/users", () => {
-  test("200: reponds with a object users that contains an array with all the users in the db", () => {
+describe("GET /api/events", () => {
+  test("200: reponds with a array events that contains an array with all the events in the db", () => {
     return request(server)
-      .get("/api/users")
+      .get("/api/events")
       .expect(200)
       .then(({ body }) => {
-        const usersArray = body.users;
-        expect(Array.isArray(usersArray)).toBe(true);
-        expect(usersArray.length).toBe(4);
-        usersArray.forEach((user) => {
-          expect(typeof user.user_id).toBe("number");
-          expect(typeof user.first_name).toBe("string");
-          expect(typeof user.last_name).toBe("string");
-          expect(typeof user.email).toBe("string");
-          expect(typeof user.address).toBe("string");
-          expect(typeof user.date_of_birth).toBe("string");
-          expect(typeof user.fav_food).toBe("string");
-          expect(typeof user.personality).toBe("string");
-          expect(typeof user.bio).toBe("string");
-          expect(typeof user.gender).toBe("string");
-          expect(typeof user.reason).toBe("string");
-          expect(typeof user.job_title).toBe("string");
-          expect(typeof user.coffee_tea).toBe("string");
-          expect(typeof user.image_url).toBe("string");
+        const eventsArray = body.events;
+        expect(Array.isArray(eventsArray)).toBe(true);
+        expect(eventsArray.length).toBe(7);
+        eventsArray.forEach((event) => {
+          expect(typeof event.event_id).toBe("number");
+          expect(typeof event.title).toBe("string");
+          expect(typeof event.description).toBe("string");
+          expect(typeof event.location).toBe("string");
+          expect(typeof event.category).toBe("string");
+          expect(typeof event.status).toBe("string");
+          expect(typeof event.event_date).toBe("string");
+          expect(typeof event.created_at).toBe("string");
         });
       });
   });
 });
 
+describe("GET /api/events/:event_id", () => {
+  test("200: reponds with a  events that contains an event details with hostname", () => {
+    return request(server)
+      .get("/api/events/1")
+      .expect(200)
+      .then(({ body }) => {
+        const event = body.event;
+
+        expect(typeof event.event_id).toBe("number");
+        expect(typeof event.title).toBe("string");
+        expect(typeof event.description).toBe("string");
+        expect(typeof event.location).toBe("string");
+        expect(typeof event.category).toBe("string");
+        expect(typeof event.status).toBe("string");
+        expect(typeof event.event_date).toBe("string");
+        expect(typeof event.created_at).toBe("string");
+        expect(typeof event.host_first_name).toBe("string");
+        expect(typeof event.host_last_name).toBe("string");
+      });
+  });
+});
+
+describe("PATCH /api/events/:event_id", () => {
+  test("200: reponds with a  events that contains an event details with hostname", () => {
+    return request(server)
+      .patch("/api/events/1")
+      .send({
+        title: "Street Food Lunch",
+        description:
+          "Grab a bite and discover new flavors together at the city’s food market.",
+        location: "Manchester",
+        category: "OTHER",
+        status: "ACTIVE",
+        event_date: "2025-04-16T15:54:56.946Z",
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const event = body.event;
+
+        expect(typeof event.event_id).toBe("number");
+        expect(typeof event.title).toBe("string");
+        expect(typeof event.description).toBe("string");
+        expect(typeof event.location).toBe("string");
+        expect(typeof event.category).toBe("string");
+        expect(typeof event.status).toBe("string");
+        expect(typeof event.event_date).toBe("string");
+        expect(typeof event.created_at).toBe("string");
+      });
+  });
+});
