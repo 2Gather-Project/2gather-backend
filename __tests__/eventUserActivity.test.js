@@ -107,7 +107,7 @@ describe("event-user-activity", () => {
   });
   test("PATCH 404: Responds with a not found, when given an invalid attendee ID", () => {
     return request(server)
-      .patch("/api/event-uer-activity/1/73")
+      .patch("/api/event-user-activity/1/73")
       .send({
         user_status: "APPROVED",
         user_approved: true,
@@ -115,6 +115,71 @@ describe("event-user-activity", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.error).toBe("Not Found");
+      });
+  });
+});
+
+
+
+describe("GET /api/users/:user_id/approved-events", () => {
+  test("200: responds with an array of events that have approved attendees for the specified host", () => {
+    return request(server)
+      .patch("/api/event-user-activity/1/2") // sending this request to have an approved event, which can be used for testing
+      .send({
+        user_status: "APPROVED",
+        user_approved: true
+      })
+      .expect(200)
+      .then(() => {
+        return request(server)
+          .get("/api/users/1/approved-events")
+          .expect(200)
+          .then(({ body }) => {
+            const { events } = body;
+            expect(Array.isArray(events)).toBe(true);
+            expect(events.length).toBe(1);
+
+            events.forEach(event => {
+              expect(typeof event.event_id).toBe("number");
+              expect(typeof event.title).toBe("string");
+              expect(typeof event.description).toBe("string");
+              expect(typeof event.location).toBe("string");
+              expect(typeof event.category).toBe("string");
+              expect(typeof event.status).toBe("string");
+              expect(typeof event.event_date).toBe("string");
+              expect(typeof event.created_at).toBe("string");
+              expect(event.user_id).toBe(1); // Ensure all events belong to user with id 1
+            });
+          });
+      });
+  });
+
+  test("200: responds with an empty array when the user has no events with approved attendees", () => {
+    return request(server)
+      .get("/api/users/4/approved-events") // Using a user who has no events with approved attendees
+      .expect(200)
+      .then(({ body }) => {
+        const { events } = body;
+        expect(Array.isArray(events)).toBe(true);
+        expect(events.length).toBe(0);
+      });
+  });
+
+  test("400: responds with an error when given an invalid user_id", () => {
+    return request(server)
+      .get("/api/users/invalid-id/approved-events")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid user");
+      });
+  });
+
+  test("404: responds with an error when the user_id does not exist", () => {
+    return request(server)
+      .get("/api/users/999999/approved-events")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User not found");
       });
   });
 });

@@ -153,6 +153,26 @@ const dropEventById = ({ user_id, topic, description, location, category }) => {
       return rows;
     });
 };
+
+const fetchApprovedEvents = (user_id) => {
+  return db.query(
+    `
+    SELECT DISTINCT events.* 
+    FROM events
+    JOIN event_user_activity 
+      ON events.event_id = event_user_activity.event_id
+    WHERE events.user_id = $1
+      AND event_user_activity.host_id = $1
+      AND event_user_activity.user_approved = true
+      AND event_user_activity.user_status = 'APPROVED'
+    `, [user_id]
+  ).then(({ rows }) => {
+
+    return rows;
+  });
+
+
+}
 module.exports = {
   fetchEvents,
   addEvent,
@@ -160,4 +180,5 @@ module.exports = {
   fetchEventById,
   dropEventById,
   fetchInterests,
+  fetchApprovedEvents
 };
