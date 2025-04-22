@@ -105,7 +105,7 @@ const updateEvent = ({
 };
 
 const fetchEventById = (event_id) => {
-  let queryString = `SELECT users.first_name as host_first_name, users.last_name as host_last_name, events.event_id as event_id, events.title as title, events.description as description,events.location as location,events.category as category,events.status as status, events.event_date as event_date , events.created_at as created_at from events join users on events.user_id = users.user_id `;
+  let queryString = `SELECT users.first_name as host_first_name, users.last_name as host_last_name, events.event_id as event_id, events.title as title, events.description as description,events.location as location,events.category as category,events.status as status, events.event_date as event_date , events.created_at as created_at, users.user_id as host_id from events join users on events.user_id = users.user_id `;
   const queryParams = [];
 
   if (event_id) {
