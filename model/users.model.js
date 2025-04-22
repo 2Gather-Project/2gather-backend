@@ -25,52 +25,20 @@ const fetchUserByID = (user_id) => {
     });
 };
 
-const postUsers = async (
-  first_name,
-  last_name,
-  email,
-  address,
-  phone_number,
-  date_of_birth,
-  fav_food,
-  personality,
-  bio,
-  gender,
-  reason,
-  job_title,
-  coffee_tea,
-  image_url
-) => {
+const postUsers = async (first_name, last_name, email, address) => {
   const query = `
     INSERT INTO users (
-      first_name, last_name, email, address, phone_number, date_of_birth, 
-      fav_food, personality, bio, gender, reason, job_title, coffee_tea, image_url
+      first_name, last_name, email, address
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
-  const formattedDate = date_of_birth;
-  const values = [
-    first_name,
-    last_name,
-    email,
-    address,
-    phone_number,
-    formattedDate,
-    fav_food,
-    personality,
-    bio,
-    gender,
-    reason,
-    job_title,
-    coffee_tea,
-    image_url,
-  ];
+  const values = [first_name, last_name, email, address];
 
   try {
     const result = await db.query(query, values);
     const user = result.rows[0];
-    user.date_of_birth = user.date_of_birth.toLocaleDateString("en-CA");
+    // user.date_of_birth = user.date_of_birth.toLocaleDateString("en-CA");
     return user;
   } catch (err) {
     console.error("Error inserting user:", err);
@@ -94,7 +62,7 @@ const updateUser = async (body) => {
   } = body;
 
   const query = `UPDATE users
-SET 
+SET
   address = $1,
   phone_number = $2,
   fav_food = $3,
@@ -131,7 +99,6 @@ RETURNING *;`;
 };
 
 const fetchUserbyEmail = (email) => {
-
   return db
     .query(`SELECT * FROM users WHERE email = $1`, [email])
     .then(({ rows }) => {
@@ -143,18 +110,15 @@ const fetchUserbyEmail = (email) => {
       }
       return rows[0];
     });
-
-}
+};
 
 const fetchHostedEvents = (user_id) => {
-
   return db
     .query(`SELECT * FROM events WHERE user_id = $1`, [user_id])
     .then(({ rows }) => {
-      return rows
-
-    })
-}
+      return rows;
+    });
+};
 
 module.exports = {
   usersExists,
@@ -163,5 +127,5 @@ module.exports = {
   postUsers,
   updateUser,
   fetchUserbyEmail,
-  fetchHostedEvents
+  fetchHostedEvents,
 };
