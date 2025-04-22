@@ -33,7 +33,6 @@ const postUsers = async (first_name, last_name, email, address) => {
     VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
-  const formattedDate = date_of_birth;
   const values = [first_name, last_name, email, address];
 
   try {
