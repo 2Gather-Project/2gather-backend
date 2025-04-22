@@ -15,12 +15,18 @@ const possible_column_names = [
 
 const possible_order = ["asc", "desc"];
 
+const fetchInterests = () => {
+  return db.query("SELECT enum_range(null::interests)").then(({ rows }) => {
+    return rows;
+  });
+};
+
 const fetchEvents = ({
   sort_by = "event_date",
   order = "asc",
   column_name = undefined,
   value = undefined,
-  not_equal = false
+  not_equal = false,
 }) => {
   if (sort_by && !possible_column_names.includes(sort_by)) {
     return Promise.reject({ status: 404, msg: "Invalid Input" });
@@ -153,4 +159,5 @@ module.exports = {
   updateEvent,
   fetchEventById,
   dropEventById,
+  fetchInterests,
 };
