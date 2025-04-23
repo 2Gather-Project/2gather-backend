@@ -46,11 +46,26 @@ const getEventsById = (request, reply) => {
 
 const postEvents = (request, reply) => {
   console.log(request.body);
-  const { user_id, title, description, location, category, event_date } =
-    request.body;
+  const {
+    user_id,
+    title,
+    description,
+    location,
+    category,
+    event_date,
+    image_url,
+  } = request.body;
 
   if (user_id) {
-    addEvent({ user_id, title, description, location, category, event_date })
+    addEvent({
+      user_id,
+      title,
+      description,
+      location,
+      category,
+      event_date,
+      image_url,
+    })
       .then((event) => {
         reply.send({ event: event[0] });
       })
@@ -65,9 +80,17 @@ const postEvents = (request, reply) => {
 
 const patchEvents = (request, reply) => {
   const { event_id } = request.params;
-  const { title, description, location, category, event_date } = request.body;
+  const { title, description, location, category, event_date,image_url } = request.body;
 
-  updateEvent({ title, description, location, category, event_date, event_id })
+  updateEvent({
+    title,
+    description,
+    location,
+    category,
+    event_date,
+    event_id,
+    image_url,
+  })
     .then((event) => {
       reply.send({ event: event[0] });
     })
