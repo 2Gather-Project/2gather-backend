@@ -10,13 +10,13 @@ const {
   getEventsById,
   deleteEvent,
   getInterests,
-  getApprovedEvents
+  getApprovedEvents,
+  patchEventStatus,
 } = require("./controller/events.controller.js");
 const {
   getEventUserActivity,
   postEventUserActivity,
   updateEventUserActivity,
-
 } = require("./controller/eventUserActivity.controller.js");
 const {
   allUsers,
@@ -60,12 +60,11 @@ fastifyApp.get("/api/events", getEvents);
 
 fastifyApp.post("/api/events", postEvents);
 fastifyApp.patch("/api/events/:event_id", patchEvents);
+fastifyApp.patch("/api/events/status/:event_id", patchEventStatus);
 fastifyApp.get("/api/events/:event_id", getEventsById);
 fastifyApp.delete("/api/events/:event_id", deleteEvent);
 fastifyApp.get("/api/event-user-activity/:event_id", getEventUserActivity);
 fastifyApp.post("/api/event-user-activity", postEventUserActivity);
-
-
 
 fastifyApp.patch(
   "/api/event-user-activity/:event_id/:attendee_id",
