@@ -161,24 +161,31 @@ const dropEventById = ({ user_id, topic, description, location, category }) => {
 };
 
 const fetchApprovedEvents = (user_id) => {
-  return db
-    .query(
-      `
-    SELECT DISTINCT events.* 
+  return db.query(
+    `
+     SELECT DISTINCT events.*
     FROM events
-    JOIN event_user_activity 
+    JOIN event_user_activity
       ON events.event_id = event_user_activity.event_id
-    WHERE events.user_id = $1
-      AND event_user_activity.host_id = $1
-      AND event_user_activity.user_approved = true
-      AND event_user_activity.user_status = 'APPROVED'
-    `,
-      [user_id]
+    WHERE (
+    
+      (events.user_id = $1 AND event_user_activity.host_id = $1
+       AND event_user_activity.user_approved = true
+       AND event_user_activity.user_status = 'APPROVED')
+      OR
+   
+      (event_user_activity.attendee_id = $1
+       AND event_user_activity.user_approved = true
+       AND event_user_activity.user_status = 'APPROVED')
     )
-    .then(({ rows }) => {
-      return rows;
-    });
-};
+    `, [user_id]
+  ).then(({ rows }) => {
+
+    return rows;
+  });
+
+
+}
 module.exports = {
   fetchEvents,
   addEvent,
