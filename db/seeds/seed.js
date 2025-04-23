@@ -179,7 +179,6 @@ function insertDataUsers(usersData) {
       user.last_name,
       user.email,
       user.address,
-      user.phone_number,
       user.date_of_birth,
       user.fav_food,
       user.personality,
@@ -195,7 +194,7 @@ function insertDataUsers(usersData) {
   return db.query(
     format(
       `INSERT INTO users
-                  (first_name,last_name,email,address, phone_number,date_of_birth,fav_food,personality,bio,gender,reason,job_title,coffee_tea,image_url)
+                  (first_name,last_name,email,address,date_of_birth,fav_food,personality,bio,gender,reason,job_title,coffee_tea,image_url)
                   VALUES
                   %L RETURNING *;`,
       users,
