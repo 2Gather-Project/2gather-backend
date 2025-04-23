@@ -81,7 +81,8 @@ module.exports = [
     job_title: "Graphic Designer",
     pet_owner: true,
     coffee_tea: "Coffee",
-    image_url: "",
+    image_url:
+      "https://images.unsplash.com/photo-1525873765963-8931ab571545?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
   },
   {
     first_name: "Luca",
@@ -97,7 +98,8 @@ module.exports = [
     job_title: "Software Engineer",
     pet_owner: false,
     coffee_tea: "Tea",
-    image_url: "",
+    image_url:
+      "https://images.unsplash.com/photo-1589010982872-5066806f5a5f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGphbWVzfGVufDB8fDB8fHww",
   },
   {
     first_name: "Jade",
@@ -113,7 +115,8 @@ module.exports = [
     job_title: "Research Scientist",
     pet_owner: true,
     coffee_tea: "Both",
-    image_url: "",
+    image_url:
+      "https://images.unsplash.com/photo-1720274248486-37c79f8ab3f3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2F0fGVufDB8fDB8fHww",
   },
   {
     first_name: "Eli",
@@ -129,6 +132,7 @@ module.exports = [
     job_title: "Teacher",
     pet_owner: false,
     coffee_tea: "Coffee",
-    image_url: "",
+    image_url:
+      "https://images.unsplash.com/photo-1593201432140-c4017429875b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGphbWVzfGVufDB8fDB8fHww",
   },
 ];
