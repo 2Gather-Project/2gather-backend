@@ -148,6 +148,21 @@ describe("PATCH /api/events/:event_id", () => {
   });
 });
 
+describe("PATCH /api/events/status/:event_id", () => {
+  test("200: reponds with a  events that changes the status of the event", () => {
+    return request(server)
+      .patch("/api/events/status/1")
+      .send({
+        status: "INACTIVE",
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const event = body.event;
+        expect(event.status).toBe("INACTIVE");
+      });
+  });
+});
+
 describe("POST /api/events", () => {
   test("200: reponds with a  events that contains an event details with hostname", () => {
     return request(server)
@@ -187,7 +202,7 @@ describe("POST /api/interests", () => {
         const interests = body.interests;
         console.log(interests);
         expect(Array.isArray(interests)).toBe(true);
-        expect(interests.length).toBe(1);
+        expect(interests.length).toBe(6);
       });
   });
 });

@@ -5,10 +5,10 @@ const {
   updateEvent,
   fetchEventById,
   dropEventById,
-  fetchApprovedEvents
+  fetchApprovedEvents,
+  updateEventStatus,
 } = require("../model/events.model");
-const { usersExists } = require('../model/users.model')
-
+const { usersExists } = require("../model/users.model");
 
 const getInterests = (request, reply) => {
   fetchInterests()
@@ -80,7 +80,8 @@ const postEvents = (request, reply) => {
 
 const patchEvents = (request, reply) => {
   const { event_id } = request.params;
-  const { title, description, location, category, event_date,image_url } = request.body;
+  const { title, description, location, category, event_date, image_url } =
+    request.body;
 
   updateEvent({
     title,
@@ -90,6 +91,22 @@ const patchEvents = (request, reply) => {
     event_date,
     event_id,
     image_url,
+  })
+    .then((event) => {
+      reply.send({ event: event[0] });
+    })
+    .catch((error) => {
+      reply.send(error);
+    });
+};
+
+const patchEventStatus = (request, reply) => {
+  const { event_id } = request.params;
+  const { status } = request.body;
+
+  updateEventStatus({
+    event_id,
+    status,
   })
     .then((event) => {
       reply.send({ event: event[0] });
@@ -115,7 +132,6 @@ const deleteEvent = (request, reply) => {
     });
 };
 
-
 const getApprovedEvents = (request, reply) => {
   const user_id = Number(request.params.user_id);
 
@@ -124,7 +140,8 @@ const getApprovedEvents = (request, reply) => {
   }
   usersExists(user_id)
     .then((response) => {
-      if (!response) return Promise.reject({ status: 404, msg: 'User not found' })
+      if (!response)
+        return Promise.reject({ status: 404, msg: "User not found" });
       return fetchApprovedEvents(user_id);
     })
     .then((rows) => {
@@ -146,5 +163,6 @@ module.exports = {
   patchEvents,
   deleteEvent,
   getInterests,
-  getApprovedEvents
+  getApprovedEvents,
+  patchEventStatus,
 };

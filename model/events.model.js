@@ -57,6 +57,8 @@ const fetchEvents = ({
     whereQyery = `WHERE ${column_name} != '${value}' `;
   }
 
+  //whereQyery += ` AND status = 'ACTIVE'`;
+
   if (value && (column_name === "status" || column_name === "category")) {
     whereQyery = `WHERE ${column_name} = '${value.toUpperCase()}' `;
   }
@@ -120,6 +122,19 @@ const updateEvent = ({
     });
 };
 
+const updateEventStatus = ({ event_id, status }) => {
+  return db
+    .query(
+      `UPDATE events
+        SET status = $1
+      WHERE EVENT_ID = $2 RETURNING *;`,
+      [status, event_id]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
+
 const fetchEventById = (event_id) => {
   let queryString = `SELECT 
   users.first_name as host_first_name, 
@@ -152,7 +167,7 @@ const fetchEventById = (event_id) => {
   });
 };
 
-const dropEventById = ({ user_id, topic, description, location, category }) => {
+const dropEventById = (event_id) => {
   return db
     .query(`DELETE FROM events where event_id = $1 returning *;`, [event_id])
     .then(({ rows }) => {
@@ -161,8 +176,9 @@ const dropEventById = ({ user_id, topic, description, location, category }) => {
 };
 
 const fetchApprovedEvents = (user_id) => {
-  return db.query(
-    `
+  return db
+    .query(
+      `
      SELECT DISTINCT events.*
     FROM events
     JOIN event_user_activity
@@ -178,14 +194,13 @@ const fetchApprovedEvents = (user_id) => {
        AND event_user_activity.user_approved = true
        AND event_user_activity.user_status = 'APPROVED')
     )
-    `, [user_id]
-  ).then(({ rows }) => {
-
-    return rows;
-  });
-
-
-}
+    `,
+      [user_id]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
 module.exports = {
   fetchEvents,
   addEvent,
@@ -194,4 +209,5 @@ module.exports = {
   dropEventById,
   fetchInterests,
   fetchApprovedEvents,
+  updateEventStatus,
 };
