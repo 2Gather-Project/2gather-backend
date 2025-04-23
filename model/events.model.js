@@ -16,9 +16,11 @@ const possible_column_names = [
 const possible_order = ["asc", "desc"];
 
 const fetchInterests = () => {
-  return db.query("SELECT enum_range(null::interests)").then(({ rows }) => {
-    return rows;
-  });
+  return db
+    .query("SELECT unnest(enum_range(NULL::interests))")
+    .then(({ rows }) => {
+      return rows;
+    });
 };
 
 const fetchEvents = ({
@@ -159,8 +161,9 @@ const dropEventById = ({ user_id, topic, description, location, category }) => {
 };
 
 const fetchApprovedEvents = (user_id) => {
-  return db.query(
-    `
+  return db
+    .query(
+      `
     SELECT DISTINCT events.* 
     FROM events
     JOIN event_user_activity 
@@ -169,14 +172,13 @@ const fetchApprovedEvents = (user_id) => {
       AND event_user_activity.host_id = $1
       AND event_user_activity.user_approved = true
       AND event_user_activity.user_status = 'APPROVED'
-    `, [user_id]
-  ).then(({ rows }) => {
-
-    return rows;
-  });
-
-
-}
+    `,
+      [user_id]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
 module.exports = {
   fetchEvents,
   addEvent,
@@ -184,5 +186,5 @@ module.exports = {
   fetchEventById,
   dropEventById,
   fetchInterests,
-  fetchApprovedEvents
+  fetchApprovedEvents,
 };
