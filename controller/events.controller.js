@@ -21,9 +21,9 @@ const getInterests = (request, reply) => {
 };
 
 const getEvents = (request, reply) => {
-  const { sort_by, order, column_name, value, not_equal } = request.query;
+  const { sort_by, order, column_name, value, not_equal,status } = request.query;
 
-  fetchEvents({ sort_by, order, column_name, value, not_equal })
+  fetchEvents({ sort_by, order, column_name, value, not_equal,status })
     .then((rows) => {
       reply.send({ events: rows });
     })

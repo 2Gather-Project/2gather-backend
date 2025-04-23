@@ -75,6 +75,42 @@ describe("GET /api/events", () => {
       });
   });
 
+  test("200: responds with a array events that contains an array with all the events in the db and status is active", () => {
+    return request(server)
+      .get(
+        "/api/events?column_name=user_id&&value=1&&not_equal=true&&status=active"
+      )
+      .expect(200)
+      .then(({ body }) => {
+        const eventsArray = body.events;
+        expect(Array.isArray(eventsArray)).toBe(true);
+        expect(eventsArray.length).toBe(6);
+        eventsArray.forEach((event) => {
+          expect(typeof event.event_id).toBe("number");
+          expect(typeof event.title).toBe("string");
+          expect(typeof event.description).toBe("string");
+          expect(typeof event.location).toBe("string");
+          expect(typeof event.category).toBe("string");
+          expect(typeof event.status).toBe("string");
+          expect(typeof event.event_date).toBe("string");
+          expect(typeof event.created_at).toBe("string");
+          expect(event.status).toBe("ACTIVE");
+        });
+      });
+  });
+
+  test("200: responds with a array events that contains an array with all the events in the db and status is inactive", () => {
+    return request(server)
+      .get(
+        "/api/events?column_name=user_id&&value=2&&not_equal=true&&status=inactive"
+      )
+      .expect(200)
+      .then(({ body }) => {
+       
+        expect(body.msg).toBe("Resource not found!!");
+      });
+  });
+
   test("200: reponds with a array events that contains an array with all the events in the db", () => {
     return request(server)
       .get("/api/events?column_name=user_id&&value=1")
