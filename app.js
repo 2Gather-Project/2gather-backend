@@ -17,7 +17,6 @@ const {
   getEventUserActivity,
   postEventUserActivity,
   updateEventUserActivity,
-  patchEventUserActivity,
 } = require("./controller/eventUserActivity.controller.js");
 const {
   allUsers,
