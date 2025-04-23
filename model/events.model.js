@@ -10,15 +10,17 @@ const possible_column_names = [
   "status",
   "created_at",
   "event_date",
-  "img_url",
+  "image_url",
 ];
 
 const possible_order = ["asc", "desc"];
 
 const fetchInterests = () => {
-  return db.query("SELECT enum_range(null::interests)").then(({ rows }) => {
-    return rows;
-  });
+  return db
+    .query("SELECT unnest(enum_range(NULL::interests))")
+    .then(({ rows }) => {
+      return rows;
+    });
 };
 
 const fetchEvents = ({
@@ -81,14 +83,15 @@ const addEvent = ({
   location,
   category,
   event_date,
+  image_url,
 }) => {
   return db
     .query(
       `INSERT INTO events
-                      (user_id,title,description,location,category,event_date)
+                      (user_id,title,description,location,category,event_date,image_url)
                       VALUES
-                      ($1,$2,$3,$4,$5,$6) RETURNING *;`,
-      [user_id, title, description, location, category, event_date]
+                      ($1,$2,$3,$4,$5,$6,$7) RETURNING *;`,
+      [user_id, title, description, location, category, event_date, image_url]
     )
     .then(({ rows }) => {
       return rows;
@@ -102,13 +105,15 @@ const updateEvent = ({
   category,
   event_date,
   event_id,
+  image_url,
 }) => {
   return db
     .query(
       `UPDATE events
-        SET TITLE = $1, DESCRIPTION = $2, LOCATION = $3 , CATEGORY = $4, EVENT_DATE= $5
+        SET TITLE = $1, DESCRIPTION = $2, LOCATION = $3 , CATEGORY = $4, EVENT_DATE= $5,
+        IMAGE_URL = $7
       WHERE EVENT_ID = $6 RETURNING *;`,
-      [title, description, location, category, event_date, event_id]
+      [title, description, location, category, event_date, event_id, image_url]
     )
     .then(({ rows }) => {
       return rows;
@@ -127,6 +132,7 @@ const fetchEventById = (event_id) => {
   events.status as status, 
   events.event_date as event_date, 
   events.created_at as created_at, 
+  events.image_url as image_url,
   users.user_id as host_id 
   from events join users 
   on events.user_id = users.user_id `;
@@ -155,8 +161,9 @@ const dropEventById = ({ user_id, topic, description, location, category }) => {
 };
 
 const fetchApprovedEvents = (user_id) => {
-  return db.query(
-    `
+  return db
+    .query(
+      `
     SELECT DISTINCT events.* 
     FROM events
     JOIN event_user_activity 
@@ -165,14 +172,13 @@ const fetchApprovedEvents = (user_id) => {
       AND event_user_activity.host_id = $1
       AND event_user_activity.user_approved = true
       AND event_user_activity.user_status = 'APPROVED'
-    `, [user_id]
-  ).then(({ rows }) => {
-
-    return rows;
-  });
-
-
-}
+    `,
+      [user_id]
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
 module.exports = {
   fetchEvents,
   addEvent,
@@ -180,5 +186,5 @@ module.exports = {
   fetchEventById,
   dropEventById,
   fetchInterests,
-  fetchApprovedEvents
+  fetchApprovedEvents,
 };

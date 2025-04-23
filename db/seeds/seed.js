@@ -95,6 +95,7 @@ function createEvents() {
     location VARCHAR NOT NULL,
     category INTERESTS DEFAULT 'OTHER',
     status EVENT_STATUS DEFAULT 'ACTIVE',
+    image_url VARCHAR,
     event_date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE)
