@@ -29,6 +29,7 @@ const fetchEvents = ({
   column_name = undefined,
   value = undefined,
   not_equal = false,
+  status = undefined,
 }) => {
   if (sort_by && !possible_column_names.includes(sort_by)) {
     return Promise.reject({ status: 404, msg: "Invalid Input" });
@@ -56,8 +57,9 @@ const fetchEvents = ({
   } else if (column_name && value && Number(value) && not_equal) {
     whereQyery = `WHERE ${column_name} != '${value}' `;
   }
-
-  //whereQyery += ` AND status = 'ACTIVE'`;
+  if (column_name && status) {
+    whereQyery += ` AND status = '${status.toUpperCase()}' `;
+  }
 
   if (value && (column_name === "status" || column_name === "category")) {
     whereQyery = `WHERE ${column_name} = '${value.toUpperCase()}' `;
@@ -68,6 +70,8 @@ const fetchEvents = ({
   }
 
   selectQuery += whereQyery + orderByQuery;
+
+  console.log(selectQuery);
 
   return db.query(selectQuery).then(({ rows }) => {
     if (rows.length === 0) {

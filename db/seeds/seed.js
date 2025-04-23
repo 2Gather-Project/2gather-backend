@@ -46,21 +46,21 @@ const seed = async ({
 function createInterests() {
   return db.query(
     `CREATE TYPE interests AS
-      ENUM('COOKING', 'DANCING', 'DOG WALKING', 'THEATER', 'READING','OTHER')`,
+      ENUM('COOKING', 'DANCING', 'DOG WALKING', 'THEATER', 'READING','OTHER')`
   );
 }
 
 function createEventStatus() {
   return db.query(
     `CREATE TYPE event_status AS
-      ENUM('ACTIVE', 'INACTIVE','CLOSED')`,
+      ENUM('ACTIVE', 'INACTIVE','CLOSED')`
   );
 }
 
 function createUserActivityStatus() {
   return db.query(
     `CREATE TYPE user_activity_status AS
-      ENUM('REQUESTED', 'APPROVED','CANCELLED')`,
+      ENUM('REQUESTED', 'APPROVED','CANCELLED')`
   );
 }
 
@@ -81,7 +81,7 @@ function createUsers() {
     reason VARCHAR,
     job_title VARCHAR,
     coffee_tea VARCHAR,
-    image_url VARCHAR)`,
+    image_url VARCHAR)`
   );
 }
 
@@ -99,7 +99,7 @@ function createEvents() {
     event_date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE)
-   `,
+   `
   );
 }
 
@@ -117,7 +117,7 @@ function createEventUserActivity() {
     FOREIGN KEY (attendee_id) REFERENCES users(user_id)  ON DELETE CASCADE,
     PRIMARY KEY (event_id, host_id, attendee_id)
     )
-    `,
+    `
   );
 }
 
@@ -130,7 +130,7 @@ function createFriendRequests() {
     FOREIGN KEY (sender_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(user_id) ON DELETE CASCADE,
     status USER_ACTIVITY_STATUS NOT NULL
-    )`,
+    )`
   );
 }
 
@@ -142,7 +142,7 @@ function createBlockedUsers() {
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (blocked_user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     PRIMARY KEY(user_id, blocked_user_id)
-    )`,
+    )`
   );
 }
 
@@ -156,7 +156,7 @@ function createChatMessages() {
     FOREIGN KEY (chat_id) REFERENCES chat_rooms(chat_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     PRIMARY KEY (chat_id, user_id)
-    )`,
+    )`
   );
 }
 
@@ -168,7 +168,7 @@ function createChatRooms() {
     receiver INT NOT NULL,
     FOREIGN KEY (initiator) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (receiver) REFERENCES users(user_id) ON DELETE CASCADE
-    )`,
+    )`
   );
 }
 
@@ -197,8 +197,8 @@ function insertDataUsers(usersData) {
                   (first_name,last_name,email,address,date_of_birth,fav_food,personality,bio,gender,reason,job_title,coffee_tea,image_url)
                   VALUES
                   %L RETURNING *;`,
-      users,
-    ),
+      users
+    )
   );
 }
 
@@ -220,8 +220,8 @@ function insertEventsData(eventsData) {
                   (user_id,title,description,location,created_at, image_url)
                   VALUES
                   %L RETURNING *;`,
-      events,
-    ),
+      events
+    )
   );
 }
 
@@ -238,8 +238,8 @@ function insertEventUserActivity(eventUserActivityData) {
   return db.query(
     format(
       `INSERT INTO event_user_activity (event_id, host_id, attendee_id, user_status, user_approved) VALUES %L RETURNING *`,
-      event_user_activity,
-    ),
+      event_user_activity
+    )
   );
 }
 
@@ -252,8 +252,8 @@ function insertFriendRequest(friendRequestsData) {
       `INSERT INTO friend_requests (
       sender_id, receiver_id, status) VALUES %L RETURNING *
       `,
-      friend_requests,
-    ),
+      friend_requests
+    )
   );
 }
 
@@ -265,8 +265,8 @@ function insertChatRooms(chatRoomsData) {
     format(
       `INSERT INTO chat_rooms (
       initiator, receiver) VALUES %L RETURNING *`,
-      chat_rooms,
-    ),
+      chat_rooms
+    )
   );
 }
 
@@ -279,8 +279,8 @@ function insertChatMessages(chatMessagesData) {
     format(
       `INSERT INTO chat_messages (
       chat_id, message, created_at, user_id) VALUES %L RETURNING *`,
-      chat_messages,
-    ),
+      chat_messages
+    )
   );
 }
 
@@ -292,8 +292,8 @@ function insertBlockedUsers(blockedUsersData) {
     format(
       `INSERT INTO blocked_users (
       user_id, blocked_user_id) VALUES %L RETURNING *`,
-      blocked_users,
-    ),
+      blocked_users
+    )
   );
 }
 
