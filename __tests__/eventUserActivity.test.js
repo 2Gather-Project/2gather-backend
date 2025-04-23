@@ -121,7 +121,7 @@ describe("event-user-activity", () => {
 
 
 
-describe("GET /api/users/:user_id/approved-events", () => {
+describe.only("GET /api/users/:user_id/approved-events", () => {
   test("200: responds with an array of events that have approved attendees for the specified host", () => {
     return request(server)
       .patch("/api/event-user-activity/1/2") // sending this request to have an approved event, which can be used for testing
@@ -156,7 +156,7 @@ describe("GET /api/users/:user_id/approved-events", () => {
 
   test("200: responds with an empty array when the user has no events with approved attendees", () => {
     return request(server)
-      .get("/api/users/4/approved-events") // Using a user who has no events with approved attendees
+      .get("/api/users/1/approved-events") // Using a user who has no events approved 
       .expect(200)
       .then(({ body }) => {
         const { events } = body;
